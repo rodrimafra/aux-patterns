@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Counterform probes · Fable 5 comparison run</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+  <style>
+    :root {
+      --bg: #121317;
+      --panel: #191a20;
+      --line: #2c2e37;
+      --ink: #f2f1ee;
+      --ink2: #c6c4bd;
+      --ink3: #8f8d86;
+      --serif: Georgia, "Iowan Old Style", Palatino, "Palatino Linotype", serif;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0 }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    .wrap { max-width: 1220px; margin: 0 auto; padding: 32px 22px 80px }
+    header .kicker {
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      margin-bottom: 10px;
+    }
+    header h1 {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: clamp(1.7rem, 4vw, 2.35rem);
+      letter-spacing: -0.02em;
+      line-height: 1.12;
+    }
+    header p.lede {
+      margin-top: 12px;
+      color: var(--ink2);
+      max-width: 44rem;
+      font-size: 0.95rem;
+    }
+    .note {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel);
+      color: var(--ink3);
+      font-size: 0.83rem;
+      max-width: 44rem;
+    }
+    .note code { font-family: var(--mono); color: var(--ink2); font-size: 0.78rem }
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 316px;
+      gap: 22px;
+      margin-top: 30px;
+    }
+    @media (max-width: 920px) { .layout { grid-template-columns: 1fr } }
+    .stage {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    #art {
+      width: min(100%, 660px);
+      aspect-ratio: 1;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 18px 52px rgba(0, 0, 0, 0.42);
+    }
+    #art canvas { display: block; width: 100% !important; height: auto !important }
+    .caption { width: min(100%, 660px) }
+    .caption strong {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 1.2rem;
+      letter-spacing: -0.01em;
+    }
+    .caption .sub {
+      font-size: 0.82rem;
+      color: var(--ink3);
+      margin-top: 4px;
+    }
+    .caption .seedline {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--ink3);
+      margin-top: 8px;
+      word-break: break-all;
+    }
+    .side {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px;
+      height: fit-content;
+    }
+    .side h2 {
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .side .sect { margin-top: 22px }
+    .probes { display: flex; flex-direction: column; gap: 7px }
+    .pbtn {
+      text-align: left;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--ink2);
+      border-radius: 10px;
+      padding: 9px 11px;
+      cursor: pointer;
+      font: inherit;
+      width: 100%;
+    }
+    .pbtn:hover { border-color: #454854 }
+    .pbtn:focus-visible { outline: 2px solid var(--ink3); outline-offset: 2px }
+    .pbtn .nm {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--ink);
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+    .pbtn .bias {
+      font-size: 0.74rem;
+      color: var(--ink3);
+      margin-top: 2px;
+      line-height: 1.35;
+    }
+    .pbtn.on {
+      border-color: color-mix(in srgb, var(--pa, #b9b7b0) 60%, var(--line));
+      background: color-mix(in srgb, var(--pa, #b9b7b0) 12%, transparent);
+    }
+    .sw { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; display: inline-block }
+    label.sl {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.79rem;
+      color: var(--ink2);
+      margin: 13px 0 5px;
+    }
+    label.sl span { color: var(--ink3); font-variant-numeric: tabular-nums }
+    input[type="range"] { width: 100%; accent-color: #c6c4bd }
+    .row { display: flex; gap: 7px; margin-top: 7px }
+    .act {
+      flex: 1;
+      border: 1px solid var(--line);
+      background: var(--bg);
+      color: var(--ink);
+      border-radius: 8px;
+      padding: 8px 6px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.8rem;
+    }
+    .act:hover { border-color: var(--ink3) }
+    .act:focus-visible { outline: 2px solid var(--ink3); outline-offset: 2px }
+    .act.on { border-color: var(--ink3); background: #21232b }
+    .checklist {
+      margin-top: 40px;
+      border-top: 1px solid var(--line);
+      padding-top: 26px;
+      max-width: 44rem;
+    }
+    .checklist h2 {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .checklist ul { color: var(--ink2); padding-left: 1.15rem; font-size: 0.92rem }
+    .checklist li { margin: 8px 0 }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="kicker">Agentic UX Patterns · generative probes</div>
+      <h1>Counterform · Fable 5 comparison run</h1>
+      <p class="lede">
+        A second interpretation of the Editorial Geometry brief, produced by Fable 5 for
+        side by side review. Same scope, five category forces, one shared alphabet:
+        every print hangs from an editorial anchor line, air is a first-class material,
+        and category identity is a bias applied to one procedure, never a new style.
+      </p>
+      <div class="note">
+        Family <code>aup-editorial-v1-fable</code> ·
+        Philosophy: <code>docs/designpowers/algorithmic-art/editorial-geometry-philosophy-fable5.md</code> ·
+        Companion run: <code>2026-08-13-editorial-geometry-probes.html</code> ·
+        Needs network once for p5.js. Not wired into <code>index.html</code>.
+      </div>
+    </header>
+
+    <div class="layout">
+      <main class="stage">
+        <div id="art"></div>
+        <div class="caption">
+          <strong id="capName"></strong>
+          <div class="sub" id="capSub"></div>
+          <div class="seedline" id="capSeed"></div>
+        </div>
+      </main>
+
+      <aside class="side">
+        <h2>Probes</h2>
+        <div class="probes" id="probeList"></div>
+
+        <div class="sect">
+          <h2>Shared params</h2>
+          <label class="sl">Emptiness <span id="emptiness-v">0.55</span></label>
+          <input type="range" id="emptiness" min="0.40" max="0.75" step="0.01" value="0.55">
+          <label class="sl">Tension <span id="tension-v">0.60</span></label>
+          <input type="range" id="tension" min="0.20" max="1" step="0.01" value="0.60">
+          <label class="sl">Overlap opacity <span id="overlap-v">0.30</span></label>
+          <input type="range" id="overlap" min="0.14" max="0.55" step="0.01" value="0.30">
+        </div>
+
+        <div class="sect">
+          <h2>Theme</h2>
+          <div class="row">
+            <button class="act" type="button" id="thLight">Light paper</button>
+            <button class="act on" type="button" id="thDark">Dark editorial</button>
+          </div>
+          <div class="row">
+            <button class="act" type="button" id="grOn">Grayscale</button>
+            <button class="act on" type="button" id="grOff">Hue on</button>
+          </div>
+        </div>
+
+        <div class="sect">
+          <h2>Seed</h2>
+          <div class="row">
+            <button class="act" type="button" id="sPrev">Prev</button>
+            <button class="act" type="button" id="sNext">Next</button>
+          </div>
+          <div class="row">
+            <button class="act" type="button" id="sRand">Random</button>
+            <button class="act" type="button" id="sReset">Reset</button>
+          </div>
+          <div class="row" style="margin-top:16px">
+            <button class="act" type="button" id="dl">Download PNG</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="checklist">
+      <h2>Review checklist</h2>
+      <ul>
+        <li>LoUX-adjacent: poster calm, or still too diagrammatic?</li>
+        <li>One idea per print? At least two fifths of the canvas left as air?</li>
+        <li>Same alphabet across the five, or five styles in disguise?</li>
+        <li>With the category title imagined beside it, does the force read without props?</li>
+        <li>Light and dark twins: same geometry, recolor only?</li>
+        <li>Grayscale: categories still distinct by structure alone?</li>
+        <li>Verdict: keep, tweak, or kill?</li>
+      </ul>
+    </section>
+  </div>
+
+  <script>
+    "use strict";
+
+    const FAMILY = "aup-editorial-v1-fable";
+
+    const PROBES = [
+      { id: 1, name: "Identity & Delegation", hex: "#f59e0b", bias: "mandate",
+        ask: "What is this agent allowed to be?",
+        blurb: "Mandate boundary / figure vs field / permission edge",
+        seed: 566578788 },
+      { id: 3, name: "Control & Steering", hex: "#f87171", bias: "vector",
+        ask: "How do people stay in charge?",
+        blurb: "Directed force / vector dominance",
+        seed: 481185840 },
+      { id: 5, name: "Transparency of Process", hex: "#38bdf8", bias: "sequence",
+        ask: "What is it doing right now?",
+        blurb: "Sequence / stages as structure",
+        seed: 332830822 },
+      { id: 7, name: "Multi-Agent Systems", hex: "#a78bfa", bias: "centers",
+        ask: "What happens when there is more than one?",
+        blurb: "Multiple centers / relay of influence (violet on the mark only)",
+        seed: 492053502 },
+      { id: 9, name: "Failure & Repair", hex: "#fb923c", bias: "break",
+        ask: "What happens when it gets it wrong?",
+        blurb: "Interrupted continuity / break then mend",
+        seed: 848816946 }
+    ];
+
+    const PALETTES = {
+      dark:  { canvas: "#15161b", fg: "#f2f1ee", muted: "#6e6c65" },
+      light: { canvas: "#f7f4ee", fg: "#17181c", muted: "#8b877c" }
+    };
+
+    let active = PROBES[0];
+    const params = {
+      seed: active.seed,
+      emptiness: 0.55,
+      tension: 0.60,
+      overlap: 0.30,
+      theme: "dark",
+      gray: false
+    };
+
+    /* color utils */
+    function hexToRgb(h) {
+      const n = parseInt(h.slice(1), 16);
+      return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+    }
+    function rgbToHex(r, g, b) {
+      return "#" + [r, g, b].map(x => Math.max(0, Math.min(255, x)).toString(16).padStart(2, "0")).join("");
+    }
+    function lerpHex(a, b, t) {
+      const A = hexToRgb(a), B = hexToRgb(b);
+      return rgbToHex(
+        Math.round(A.r + (B.r - A.r) * t),
+        Math.round(A.g + (B.g - A.g) * t),
+        Math.round(A.b + (B.b - A.b) * t)
+      );
+    }
+    function toGray(hx) {
+      const { r, g, b } = hexToRgb(hx);
+      const y = Math.round(0.2126 * r + 0.7152 * g + 0.0722 * b);
+      return rgbToHex(y, y, y);
+    }
+
+    /* UI wiring */
+    const probeList = document.getElementById("probeList");
+    PROBES.forEach((pr, i) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "pbtn" + (i === 0 ? " on" : "");
+      b.style.setProperty("--pa", pr.hex);
+      b.setAttribute("aria-pressed", i === 0 ? "true" : "false");
+      b.innerHTML =
+        '<span class="nm"><i class="sw" style="background:' + pr.hex + '"></i>' +
+        pr.id + ". " + pr.name + ' <span style="color:var(--ink3);font-weight:400">' + pr.hex + "</span></span>" +
+        '<span class="bias">' + pr.blurb + "</span>";
+      b.onclick = () => {
+        active = pr;
+        params.seed = pr.seed;
+        document.querySelectorAll(".pbtn").forEach(x => {
+          x.classList.remove("on");
+          x.setAttribute("aria-pressed", "false");
+        });
+        b.classList.add("on");
+        b.setAttribute("aria-pressed", "true");
+        refresh();
+      };
+      probeList.appendChild(b);
+    });
+
+    function refresh() {
+      document.getElementById("capName").textContent = active.id + ". " + active.name;
+      document.getElementById("capSub").textContent = active.ask + " · force: " + active.blurb;
+      document.getElementById("capSeed").textContent =
+        FAMILY + "|" + active.id + "|" + active.hex +
+        " · seed " + params.seed +
+        (params.seed !== active.seed ? " (probe seed " + active.seed + ")" : "");
+      if (window._redraw) window._redraw();
+    }
+
+    function bindSlider(id, key) {
+      const el = document.getElementById(id);
+      const lab = document.getElementById(id + "-v");
+      el.oninput = () => {
+        params[key] = parseFloat(el.value);
+        lab.textContent = Number(el.value).toFixed(2);
+        refresh();
+      };
+    }
+    bindSlider("emptiness", "emptiness");
+    bindSlider("tension", "tension");
+    bindSlider("overlap", "overlap");
+
+    function setOn(id, on) { document.getElementById(id).classList.toggle("on", on); }
+    function syncToggles() {
+      setOn("thLight", params.theme === "light");
+      setOn("thDark", params.theme === "dark");
+      setOn("grOn", params.gray);
+      setOn("grOff", !params.gray);
+    }
+    document.getElementById("thLight").onclick = () => { params.theme = "light"; syncToggles(); refresh(); };
+    document.getElementById("thDark").onclick = () => { params.theme = "dark"; syncToggles(); refresh(); };
+    document.getElementById("grOn").onclick = () => { params.gray = true; syncToggles(); refresh(); };
+    document.getElementById("grOff").onclick = () => { params.gray = false; syncToggles(); refresh(); };
+    document.getElementById("sPrev").onclick = () => { params.seed = Math.max(1, params.seed - 1); refresh(); };
+    document.getElementById("sNext").onclick = () => { params.seed += 1; refresh(); };
+    document.getElementById("sRand").onclick = () => { params.seed = 1 + Math.floor(Math.random() * 999999998); refresh(); };
+    document.getElementById("sReset").onclick = () => { params.seed = active.seed; refresh(); };
+    document.getElementById("dl").onclick = () => { if (window._save) window._save(); };
+    syncToggles();
+
+    /* ============================================================
+       Counterform engine
+       One procedure, five bias builders. All variation comes from
+       the seeded random stream. All coordinates snap to 8px.
+       Roles per print: field mass, mute companion, 1 to 3 seeded
+       satellites, one force structure, one accent mark.
+       ============================================================ */
+
+    const sketch = (p) => {
+      const S = 800;
+      let g;
+      let els = [];
+      let boxes = [];
+      let F = null; // frame context for the current composition
+
+      p.setup = () => {
+        const c = p.createCanvas(S, S);
+        c.parent("art");
+        g = p.createGraphics(S, S);
+        g.strokeCap(p.ROUND);
+        g.strokeJoin(p.ROUND);
+        p.noLoop();
+        window._redraw = () => { compose(); p.redraw(); };
+        window._save = () => p.saveCanvas("aup-fable-probe-" + active.id + "-" + params.seed + "-" + params.theme, "png");
+        compose();
+      };
+      p.draw = () => { p.image(g, 0, 0); };
+
+      /* --- primitives of chance, all snapped --- */
+      function snap(v) { return Math.round(v / 8) * 8; }
+      function rnd() { return p.random(); }
+      function rr(a, b) { return a + rnd() * (b - a); }
+      function pickA(arr) { return arr[Math.floor(rnd() * arr.length) % arr.length]; }
+      function pickW(obj) {
+        const keys = Object.keys(obj);
+        let s = 0;
+        keys.forEach(k => { s += obj[k]; });
+        let r = rnd() * s;
+        for (let i = 0; i < keys.length; i++) {
+          r -= obj[keys[i]];
+          if (r <= 0) return keys[i];
+        }
+        return keys[keys.length - 1];
+      }
+      function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+      /* --- element list --- */
+      function E(o) { els.push(o); }
+      function markBox(x, y, w, h) { boxes.push({ x: x, y: y, w: w, h: h }); }
+
+      /* orientation helpers: v maps to x when vertical is true */
+      function opt(v, u, vertical) { return vertical ? { x: v, y: u } : { x: u, y: v }; }
+      function obox(v0, u0, vs, us, vertical) {
+        return vertical ? { x: v0, y: u0, w: vs, h: us } : { x: u0, y: v0, w: us, h: vs };
+      }
+
+      function frame() {
+        const eN = (params.emptiness - 0.4) / 0.35;
+        const m = snap(p.lerp(72, 152, clamp(eN, 0, 1)));
+        return {
+          eN: clamp(eN, 0, 1),
+          t: params.tension,
+          ov: params.overlap,
+          m: m,
+          lo: m,
+          hi: S - m,
+          span: S - 2 * m,
+          q: (u) => snap(m + (S - 2 * m) * u)
+        };
+      }
+
+      /* --- role fills --- */
+      function fieldMass(kind, x, y, w, h) {
+        const a = 0.30 + F.ov * 0.50;
+        if (kind === "circle") E({ k: "circle", x: x + w / 2, y: y + h / 2, d: Math.min(w, h), role: "muted", a: a });
+        else if (kind === "capsule") E({ k: "rr", x: x, y: y, w: w, h: h, r: Math.min(w, h) / 2, role: "muted", a: a });
+        else E({ k: "rr", x: x, y: y, w: w, h: h, r: Math.min(32, w / 6, h / 6), role: "muted", a: a });
+        markBox(x, y, w, h);
+      }
+      function muteMass(kind, x, y, w, h) {
+        const a = 0.10 + F.ov * 0.16;
+        if (kind === "circle") E({ k: "circle", x: x + w / 2, y: y + h / 2, d: Math.min(w, h), role: "fg", a: a });
+        else if (kind === "capsule") E({ k: "rr", x: x, y: y, w: w, h: h, r: Math.min(w, h) / 2, role: "fg", a: a });
+        else E({ k: "rr", x: x, y: y, w: w, h: h, r: Math.min(24, w / 6, h / 6), role: "fg", a: a });
+        markBox(x, y, w, h);
+      }
+
+      /* ---------- bias builders ---------- */
+
+      /* 1 · mandate: a hard permission edge; the field holds its side,
+         a ghosted figure waits just beyond, the accent sits on the line. */
+      function buildMandate() {
+        const vertical = rnd() < 0.62;
+        const homeLow = rnd() < 0.5;
+        const edgeV = F.q(pickA([0.42, 0.5, 0.58]));
+        const fd = snap(p.lerp(248, 176, F.eN));
+        const kind = pickW({ circle: 0.5, rrect: 0.3, capsule: 0.2 });
+
+        let fv = fd, fu = fd;
+        if (kind === "rrect") fu = snap(Math.min(fd * 1.25, F.span * 0.7));
+        if (kind === "capsule") { fv = snap(fd * 0.55); fu = snap(fd * 1.1); }
+        const homeSpace = snap(homeLow ? edgeV - F.lo : F.hi - edgeV);
+        fv = Math.min(fv, homeSpace);
+
+        const uc = clamp(F.q(rr(0.32, 0.68)), F.lo + fu / 2, F.hi - fu / 2);
+        const v0 = homeLow ? edgeV - fv : edgeV;
+        const b = obox(snap(v0), snap(uc - fu / 2), fv, fu, vertical);
+        fieldMass(kind === "capsule" ? "capsule" : kind === "circle" ? "circle" : "rrect", b.x, b.y, b.w, b.h);
+
+        /* the permission edge */
+        const e1 = opt(edgeV, F.lo, vertical);
+        const e2 = opt(edgeV, F.hi, vertical);
+        E({ k: "line", x1: e1.x, y1: e1.y, x2: e2.x, y2: e2.y, wt: 3, role: "fg", a: 0.55 });
+
+        /* ghosted delegate beyond the edge */
+        const dd = snap(fd * 0.34);
+        let gap = snap(p.lerp(24, 88, F.t));
+        const dir = homeLow ? 1 : -1;
+        let dv = edgeV + dir * (gap + dd / 2);
+        dv = clamp(dv, F.lo + dd / 2, F.hi - dd / 2);
+        const du = clamp(snap(uc + (rnd() - 0.5) * 96), F.lo + dd / 2, F.hi - dd / 2);
+        const dc = opt(snap(dv), snap(du), vertical);
+        E({ k: "circle", x: dc.x, y: dc.y, d: dd, role: "fg", a: 0.10 + F.ov * 0.12 });
+        E({ k: "ring", x: dc.x, y: dc.y, d: dd, wt: 3, role: "fg", a: 0.45 });
+        markBox(dc.x - dd / 2, dc.y - dd / 2, dd, dd);
+
+        /* mute companion on the home side, far corner */
+        const ms = snap(fd * 0.38);
+        const mu = uc < (F.lo + F.hi) / 2 ? F.hi - ms : F.lo;
+        const mv = homeLow ? F.lo : F.hi - ms;
+        const mb = obox(mv, mu, ms, ms, vertical);
+        muteMass(pickW({ rrect: 0.5, circle: 0.3, capsule: 0.2 }), mb.x, mb.y, mb.w, mb.h);
+
+        /* accent: a small square sitting exactly on the edge, at the delegate's height */
+        const as = snap(24 + F.t * 16);
+        const ac = opt(edgeV, snap(du), vertical);
+        E({ k: "rr", x: ac.x - as / 2, y: ac.y - as / 2, w: as, h: as, r: 4, role: "accent", a: 1 });
+        markBox(ac.x - as / 2, ac.y - as / 2, as, as);
+      }
+
+      /* 3 · vector: one dominant throw with diminishing echoes on one side. */
+      function buildVector() {
+        const axis = pickW({ h: 0.30, v: 0.18, d: 0.52 });
+        const fx = rnd() < 0.5 ? 1 : -1;
+        const fy = rnd() < 0.5 ? 1 : -1;
+        let ux = 0, uy = 0;
+        if (axis === "h") { ux = fx; uy = 0; }
+        else if (axis === "v") { ux = 0; uy = fy; }
+        else { ux = fx * 0.7071; uy = fy * 0.7071; }
+
+        const sx = ux > 0.1 ? F.q(rr(0.14, 0.26)) : ux < -0.1 ? F.q(rr(0.74, 0.86)) : F.q(rr(0.34, 0.66));
+        const sy = uy > 0.1 ? F.q(rr(0.14, 0.26)) : uy < -0.1 ? F.q(rr(0.74, 0.86)) : F.q(rr(0.34, 0.66));
+
+        const fd = snap(p.lerp(216, 152, F.eN));
+        const kind = pickW({ circle: 0.45, rrect: 0.3, capsule: 0.25 });
+        const fw = kind === "capsule" ? snap(fd * 1.2) : fd;
+        const fh = kind === "capsule" ? snap(fd * 0.5) : fd;
+        fieldMass(kind, snap(sx - fw / 2), snap(sy - fh / 2), fw, fh);
+
+        let L = snap(p.lerp(272, 424, F.t));
+        let tx = sx + ux * L, ty = sy + uy * L;
+        while ((tx < F.lo || tx > F.hi || ty < F.lo || ty > F.hi) && L > 96) {
+          L -= 16;
+          tx = sx + ux * L; ty = sy + uy * L;
+        }
+        tx = snap(tx); ty = snap(ty);
+
+        const bx = snap(sx + ux * fd * 0.18);
+        const by = snap(sy + uy * fd * 0.18);
+        E({ k: "line", x1: bx, y1: by, x2: tx, y2: ty, wt: 12, role: "fg", a: 0.80 });
+
+        /* echoes: same side, diminishing, never equal to the master stroke */
+        const px = -uy, py = ux;
+        const side = rnd() < 0.5 ? 1 : -1;
+        const off = snap(28 + F.t * 10);
+        [[1, 0.58, 0.40], [2, 0.34, 0.26]].forEach(cfg => {
+          const o = off * cfg[0] * side;
+          const el = L * cfg[1];
+          E({
+            k: "line",
+            x1: snap(bx + px * o + ux * 24), y1: snap(by + py * o + uy * 24),
+            x2: snap(bx + px * o + ux * (24 + el)), y2: snap(by + py * o + uy * (24 + el)),
+            wt: 3, role: "fg", a: cfg[2]
+          });
+        });
+        markBox(Math.min(bx, tx) - 40, Math.min(by, ty) - 40, Math.abs(tx - bx) + 80, Math.abs(ty - by) + 80);
+
+        /* accent: arrow tip at the end of the throw */
+        const ang = Math.atan2(uy, ux) * 180 / Math.PI;
+        const asz = snap(30 + F.t * 14);
+        const ax = snap(tx + ux * 16), ay = snap(ty + uy * 16);
+        E({ k: "tri", x: ax, y: ay, s: asz, ang: ang, role: "accent", a: 1 });
+        markBox(ax - asz, ay - asz, asz * 2, asz * 2);
+
+        /* mute companion in the corner farthest from both start and tip */
+        const ms = snap(fd * 0.42);
+        const corners = [[F.lo, F.lo], [F.hi - ms, F.lo], [F.lo, F.hi - ms], [F.hi - ms, F.hi - ms]];
+        let best = corners[0], bd = -1;
+        corners.forEach(c => {
+          const ccx = c[0] + ms / 2, ccy = c[1] + ms / 2;
+          const d1 = Math.hypot(ccx - sx, ccy - sy);
+          const d2 = Math.hypot(ccx - tx, ccy - ty);
+          const dm = Math.min(d1, d2);
+          if (dm > bd) { bd = dm; best = c; }
+        });
+        muteMass(pickW({ circle: 0.4, rrect: 0.4, capsule: 0.2 }), best[0], best[1], ms, ms);
+      }
+
+      /* 5 · sequence: progressive closure. Quarter, half, three quarters, whole.
+         The accent dot marks the live edge of the arc still in progress. */
+      function buildSequence() {
+        const colMode = rnd() < 0.26; /* occasionally a vertical column */
+        const n = (F.t > 0.5 && rnd() < 0.55) ? 4 : 3;
+        const sweepQ = n === 4 ? [1, 2, 3, 4] : [1, 2, 4];
+
+        let d = snap(p.lerp(112, 72, F.eN));
+        let gapC = snap(d * 0.55 + F.t * 16);
+        let pitch = d + gapC;
+        let total = (n - 1) * pitch + d;
+        while (total > F.span * 0.92 && d > 48) {
+          d -= 8; gapC = snap(d * 0.55 + F.t * 16); pitch = d + gapC;
+          total = (n - 1) * pitch + d;
+        }
+
+        const anchor = pickA([0.5, 0.6, 0.4]);
+        const vRow = F.q(anchor);
+        const u0 = clamp(snap((F.lo + F.hi) / 2 - total / 2 + (rnd() - 0.5) * 64), F.lo, F.hi - total);
+
+        for (let i = 0; i < n; i++) {
+          const uc = u0 + d / 2 + i * pitch;
+          const c = opt(vRow, snap(uc), colMode);
+          const sweep = sweepQ[i] * p.HALF_PI;
+          if (sweepQ[i] === 4) {
+            E({ k: "circle", x: c.x, y: c.y, d: d, role: "fg", a: 0.10 + F.ov * 0.12 });
+            E({ k: "ring", x: c.x, y: c.y, d: d, wt: 5, role: "fg", a: 0.62 });
+          } else {
+            E({ k: "arc", x: c.x, y: c.y, d: d, a0: -p.HALF_PI, a1: -p.HALF_PI + sweep, wt: 5, role: "fg", a: 0.62 });
+          }
+          if (i === n - 2) {
+            /* accent: the live edge of the last incomplete stage */
+            const aEnd = -p.HALF_PI + sweep;
+            const dotD = snap(16 + F.t * 10);
+            const axp = snap(c.x + Math.cos(aEnd) * d / 2);
+            const ayp = snap(c.y + Math.sin(aEnd) * d / 2);
+            E({ k: "circle", x: axp, y: ayp, d: dotD, role: "accent", a: 1 });
+          }
+        }
+        const rb1 = opt(vRow, u0, colMode);
+        const rb2 = opt(vRow, u0 + total, colMode);
+        markBox(Math.min(rb1.x, rb2.x) - d / 2, Math.min(rb1.y, rb2.y) - d / 2,
+                Math.abs(rb2.x - rb1.x) + d, Math.abs(rb2.y - rb1.y) + d);
+
+        /* track rule under (or beside) the row */
+        const vTrack = Math.min(vRow + d / 2 + snap(28), F.hi);
+        const t1 = opt(vTrack, u0, colMode);
+        const t2 = opt(vTrack, u0 + total, colMode);
+        E({ k: "line", x1: t1.x, y1: t1.y, x2: t2.x, y2: t2.y, wt: 2, role: "muted", a: 0.7 });
+
+        /* field mass in the opposite band */
+        const fd = snap(p.lerp(232, 168, F.eN));
+        const vField = anchor >= 0.5 ? F.q(0.18) : F.q(0.82);
+        const uField = F.q(rnd() < 0.5 ? 0.28 : 0.72);
+        const fb = obox(clamp(snap(vField - fd / 2), F.lo, F.hi - fd),
+                        clamp(snap(uField - fd / 2), F.lo, F.hi - fd), fd, fd, colMode);
+        fieldMass(pickW({ circle: 0.55, rrect: 0.45 }), fb.x, fb.y, fb.w, fb.h);
+
+        /* mute companion: same band as the field, far end of the row axis */
+        const ms = snap(fd * 0.36);
+        const uMute = uField < (F.lo + F.hi) / 2 ? F.hi - ms : F.lo;
+        const mb = obox(clamp(snap(vField - ms / 2), F.lo, F.hi - ms), uMute, ms, ms, colMode);
+        muteMass(pickW({ rrect: 0.5, capsule: 0.3, circle: 0.2 }), mb.x, mb.y, mb.w, mb.h);
+      }
+
+      /* 7 · centers: influence relayed through overlapping translucent discs.
+         The overlap lens is the depth. Accent (violet) only on the smallest mark. */
+      function buildCenters() {
+        const diag = rnd() < 0.45;
+        const fx = rnd() < 0.5 ? 1 : -1;
+        const fy = rnd() < 0.5 ? 1 : -1;
+        let ux, uy;
+        if (diag) { ux = fx * 0.7071; uy = fy * 0.7071; }
+        else if (rnd() < 0.72) { ux = fx; uy = 0; }
+        else { ux = 0; uy = fy; }
+
+        const R1 = Math.max(48, snap(p.lerp(116, 84, F.eN)));
+        const R2 = Math.max(32, snap(R1 * 0.66));
+        const R3 = Math.max(20, snap(R1 * 0.40));
+        const ovN = (F.ov - 0.14) / 0.41;
+        const lens = snap(p.lerp(12, 44, ovN));
+        const d12 = R1 + R2 - lens;
+        const d23 = R2 + R3 - snap(lens * 0.75);
+
+        const half = (R1 + d12 + d23 + R3) / 2;
+        let mx = F.q(rr(0.42, 0.58));
+        let my = F.q(rr(0.42, 0.58));
+        /* keep the whole chain inside the frame */
+        const cAt = (dist) => ({ x: mx + ux * dist, y: my + uy * dist });
+        const off1 = -half + R1, off3 = half - R3;
+        for (let i = 0; i < 24; i++) {
+          const c1 = cAt(off1), c3 = cAt(off3);
+          const minX = Math.min(c1.x - R1, c3.x - R3);
+          const maxX = Math.max(c1.x + R1, c3.x + R3);
+          const minY = Math.min(c1.y - R1, c3.y - R3);
+          const maxY = Math.max(c1.y + R1, c3.y + R3);
+          let nx = 0, ny = 0;
+          if (minX < F.lo) nx = F.lo - minX;
+          if (maxX > F.hi) nx = F.hi - maxX;
+          if (minY < F.lo) ny = F.lo - minY;
+          if (maxY > F.hi) ny = F.hi - maxY;
+          if (!nx && !ny) break;
+          mx += nx; my += ny;
+        }
+        mx = snap(mx); my = snap(my);
+
+        const c1 = cAt(off1), c2 = cAt(off1 + d12), c3 = cAt(off3);
+        const P1 = { x: snap(c1.x), y: snap(c1.y) };
+        const P2 = { x: snap(c2.x), y: snap(c2.y) };
+        const P3 = { x: snap(c3.x), y: snap(c3.y) };
+
+        /* thread rule first, discs over it */
+        E({
+          k: "line",
+          x1: snap(P1.x - ux * (R1 + 32)), y1: snap(P1.y - uy * (R1 + 32)),
+          x2: snap(P3.x + ux * (R3 + 32)), y2: snap(P3.y + uy * (R3 + 32)),
+          wt: 2, role: "muted", a: 0.75
+        });
+
+        /* field = big disc, mute companion = middle disc, accent = small disc */
+        E({ k: "circle", x: P1.x, y: P1.y, d: R1 * 2, role: "muted", a: 0.34 + F.ov * 0.40 });
+        E({ k: "circle", x: P2.x, y: P2.y, d: R2 * 2, role: "fg", a: 0.13 + F.ov * 0.18 });
+        E({ k: "ring", x: P2.x, y: P2.y, d: R2 * 2, wt: 3, role: "fg", a: 0.40 });
+        E({ k: "circle", x: P3.x, y: P3.y, d: R3 * 2, role: "accent", a: 1 });
+
+        markBox(P1.x - R1, P1.y - R1, R1 * 2, R1 * 2);
+        markBox(P2.x - R2, P2.y - R2, R2 * 2, R2 * 2);
+        markBox(P3.x - R3, P3.y - R3, R3 * 2, R3 * 2);
+      }
+
+      /* 9 · break: the longest line in the print is interrupted, the continuation
+         lands 8 or 16px off true, and one accent stitch bridges the splice. */
+      function buildBreak() {
+        const diag = rnd() < 0.4;
+        const off = (F.t > 0.55 ? 16 : 8) * (rnd() < 0.5 ? 1 : -1);
+        const gap = snap(p.lerp(28, 80, F.t));
+
+        let a1, a2, b1, b2; /* segment A start/end, segment B start/end */
+        if (!diag) {
+          const horiz = rnd() < 0.7;
+          const vLine = F.q(pickA([0.42, 0.5, 0.58]));
+          const u0 = F.lo + snap(rnd() * 32);
+          const u1 = F.hi - snap(rnd() * 32);
+          const ub = snap(F.lo + F.span * rr(0.38, 0.62));
+          const pA = (u) => opt(vLine, u, !horiz);
+          const pB = (u) => opt(vLine + off, u, !horiz);
+          a1 = pA(u0); a2 = pA(snap(ub - gap / 2));
+          b1 = pB(snap(ub + gap / 2)); b2 = pB(u1);
+        } else {
+          const j = snap(rnd() * F.span * 0.2);
+          const k = snap(rnd() * F.span * 0.2);
+          const Ld = Math.min(F.hi - (F.lo + j), F.hi - (F.lo + k));
+          const s0 = { x: F.lo + j, y: F.lo + k };
+          const sB = rr(0.38, 0.62);
+          /* advancing e along the 45 line moves e*0.7071 on each axis */
+          const adv = (e) => ({ x: snap(s0.x + e * 0.7071), y: snap(s0.y + e * 0.7071) });
+          const Lline = Ld / 0.7071;
+          a1 = { x: snap(s0.x), y: snap(s0.y) };
+          a2 = adv(Lline * sB - gap / 2);
+          const bStart = adv(Lline * sB + gap / 2);
+          const bEnd = adv(Lline);
+          b1 = { x: snap(bStart.x - 0.7071 * off), y: snap(bStart.y + 0.7071 * off) };
+          b2 = { x: snap(bEnd.x - 0.7071 * off), y: snap(bEnd.y + 0.7071 * off) };
+        }
+
+        E({ k: "line", x1: a1.x, y1: a1.y, x2: a2.x, y2: a2.y, wt: 16, role: "fg", a: 0.72 });
+        E({ k: "line", x1: b1.x, y1: b1.y, x2: b2.x, y2: b2.y, wt: 16, role: "fg", a: 0.72 });
+        markBox(Math.min(a1.x, a2.x) - 24, Math.min(a1.y, a2.y) - 24,
+                Math.abs(a2.x - a1.x) + 48, Math.abs(a2.y - a1.y) + 48);
+        markBox(Math.min(b1.x, b2.x) - 24, Math.min(b1.y, b2.y) - 24,
+                Math.abs(b2.x - b1.x) + 48, Math.abs(b2.y - b1.y) + 48);
+
+        /* accent: the stitch that mends the splice */
+        E({ k: "line", x1: a2.x, y1: a2.y, x2: b1.x, y2: b1.y, wt: 6, role: "accent", a: 1 });
+
+        /* field mass on the quieter lateral side */
+        const fd = snap(p.lerp(224, 160, F.eN));
+        const midY = (a1.y + b2.y) / 2;
+        const vSide = midY < (F.lo + F.hi) / 2 ? 0.78 : 0.22;
+        const fxq = F.q(rnd() < 0.5 ? 0.28 : 0.72);
+        const fyq = F.q(vSide);
+        const fbx = clamp(snap(fxq - fd / 2), F.lo, F.hi - fd);
+        const fby = clamp(snap(fyq - fd / 2), F.lo, F.hi - fd);
+        fieldMass(pickW({ circle: 0.6, rrect: 0.4 }), fbx, fby, fd, fd);
+
+        /* mute companion in the opposite corner */
+        const ms = snap(fd * 0.38);
+        const mux = fbx + fd / 2 < (F.lo + F.hi) / 2 ? F.hi - ms : F.lo;
+        const muy = vSide > 0.5 ? F.lo : F.hi - ms;
+        muteMass(pickW({ rrect: 0.5, circle: 0.3, capsule: 0.2 }), mux, muy, ms, ms);
+      }
+
+      /* ---------- satellites: small seeded marks in the remaining air ---------- */
+      function placeSatellites() {
+        const kMax = F.eN > 0.55 ? 2 : 3;
+        const k = 1 + Math.floor(rnd() * kMax) % kMax;
+        let placed = 0, tries = 0;
+        while (placed < k && tries < 40) {
+          tries++;
+          const x = snap(rr(F.lo + 16, F.hi - 16));
+          const y = snap(rr(F.lo + 16, F.hi - 16));
+          let ok = true;
+          for (let i = 0; i < boxes.length; i++) {
+            const b = boxes[i];
+            if (x > b.x - 48 && x < b.x + b.w + 48 && y > b.y - 48 && y < b.y + b.h + 48) { ok = false; break; }
+          }
+          if (!ok) continue;
+          const kind = pickW({ dot: 0.4, tick: 0.35, ring: 0.25 });
+          if (kind === "dot") {
+            const d = snap(16 + rnd() * 8);
+            E({ k: "circle", x: x, y: y, d: d, role: "fg", a: 0.16 + F.ov * 0.12 });
+            markBox(x - d, y - d, d * 2, d * 2);
+          } else if (kind === "ring") {
+            const d = snap(24 + rnd() * 8);
+            E({ k: "ring", x: x, y: y, d: d, wt: 3, role: "fg", a: 0.30 });
+            markBox(x - d, y - d, d * 2, d * 2);
+          } else {
+            const len = snap(48 + rnd() * 32);
+            const dir = pickA([0, 45, 90]);
+            let x2 = x + len, y2 = y;
+            if (dir === 90) { x2 = x; y2 = y + len; }
+            if (dir === 45) { x2 = snap(x + len * 0.7071); y2 = snap(y - len * 0.7071); }
+            x2 = clamp(x2, F.lo, F.hi); y2 = clamp(y2, F.lo, F.hi);
+            E({ k: "line", x1: x, y1: y, x2: x2, y2: y2, wt: 3, role: "fg", a: 0.30 });
+            markBox(Math.min(x, x2), Math.min(y, y2), Math.abs(x2 - x) + 8, Math.abs(y2 - y) + 8);
+          }
+          placed++;
+        }
+      }
+
+      /* ---------- palette and render ---------- */
+      function palette() {
+        const base = PALETTES[params.theme];
+        let accent = params.theme === "light" ? lerpHex(active.hex, "#17181c", 0.40) : active.hex;
+        let out = { canvas: base.canvas, fg: base.fg, muted: base.muted, accent: accent };
+        if (params.gray) {
+          out = {
+            canvas: toGray(out.canvas), fg: toGray(out.fg),
+            muted: toGray(out.muted), accent: toGray(out.accent)
+          };
+        }
+        return out;
+      }
+      function colOf(C, role, a) {
+        const { r, g: gg, b } = hexToRgb(C[role]);
+        return p.color(r, gg, b, a * 255);
+      }
+      function drawTri(x, y, s, ang) {
+        const r = ang * Math.PI / 180;
+        const spread = 2.5;
+        g.triangle(
+          x, y,
+          x - Math.cos(r + spread) * s, y - Math.sin(r + spread) * s,
+          x - Math.cos(r - spread) * s, y - Math.sin(r - spread) * s
+        );
+      }
+      function render() {
+        const C = palette();
+        g.clear();
+        g.background(C.canvas);
+        els.forEach(el => {
+          const c = colOf(C, el.role, el.a);
+          if (el.k === "circle") {
+            g.noStroke(); g.fill(c);
+            g.circle(el.x, el.y, el.d);
+          } else if (el.k === "ring") {
+            g.noFill(); g.stroke(c); g.strokeWeight(el.wt);
+            g.circle(el.x, el.y, el.d);
+          } else if (el.k === "rr") {
+            g.noStroke(); g.fill(c);
+            g.rect(el.x, el.y, el.w, el.h, Math.min(el.r, el.w / 2, el.h / 2));
+          } else if (el.k === "line") {
+            g.noFill(); g.stroke(c); g.strokeWeight(el.wt);
+            g.line(el.x1, el.y1, el.x2, el.y2);
+          } else if (el.k === "arc") {
+            g.noFill(); g.stroke(c); g.strokeWeight(el.wt);
+            g.arc(el.x, el.y, el.d, el.d, el.a0, el.a1);
+          } else if (el.k === "tri") {
+            g.noStroke(); g.fill(c);
+            drawTri(el.x, el.y, el.s, el.ang);
+          }
+        });
+      }
+
+      const BUILDERS = {
+        mandate: buildMandate,
+        vector: buildVector,
+        sequence: buildSequence,
+        centers: buildCenters,
+        break: buildBreak
+      };
+
+      function compose() {
+        p.randomSeed(params.seed);
+        els = [];
+        boxes = [];
+        F = frame();
+        BUILDERS[active.bias]();
+        placeSatellites();
+        render();
+      }
+    };
+
+    new p5(sketch);
+    refresh();
+  </script>
+</body>
+</html>

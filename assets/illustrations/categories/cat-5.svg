@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224 224" fill="none" aria-hidden="true">
+<g clip-path="url(#clip-cat-5)">
+<path d="M224 0H0V224H224V0Z" fill="#2A7EA4"/>
+<path d="M52.5 14V52.5H14V14H52.5Z" fill="#F2EEE2" fill-opacity="0.5"/>
+<path d="M105 14V52.5H66.5V14H105Z" fill="#F2EEE2" fill-opacity="0.5"/>
+<path d="M157.5 14V52.5H119V14H157.5Z" fill="#F2EEE2" fill-opacity="0.5"/>
+<path d="M210 14V52.5H171.5V14H210Z" fill="#F2EEE2" fill-opacity="0.5"/>
+<path d="M54.5 64.5H12V107H54.5V64.5Z" fill="#F2EEE2" fill-opacity="0.5"/>
+<path d="M107 64.5H64.5V107H107V64.5Z" fill="#F2EEE2"/>
+<path d="M157.5 66.5V105H119V66.5H157.5Z" fill="#F2EEE2" fill-opacity="0.5"/>
+<path d="M210 66.5V105H171.5V66.5H210Z" fill="#F2EEE2" fill-opacity="0.5"/>
+<path d="M52.5 119V157.5H14V119H52.5Z" fill="#F2EEE2" fill-opacity="0.5"/>
+<path d="M105 119V157.5H66.5V119H105Z" fill="#F2EEE2" fill-opacity="0.5"/>
+<path d="M157.5 119V157.5H119V119H157.5Z" fill="#F2EEE2" fill-opacity="0.5"/>
+<path d="M210 119V157.5H171.5V119H210Z" fill="#F2EEE2" fill-opacity="0.5"/>
+<path d="M52.5 171.5V210H14V171.5H52.5Z" fill="#F2EEE2" fill-opacity="0.5"/>
+<path d="M105 171.5V210H66.5V171.5H105Z" fill="#F2EEE2" fill-opacity="0.5"/>
+<path d="M157.5 171.5V210H119V171.5H157.5Z" fill="#F2EEE2" fill-opacity="0.5"/>
+<path d="M210 171.5V210H171.5V171.5H210Z" fill="#F2EEE2" fill-opacity="0.5"/>
+<path d="M111 60.5V111H60.5V60.5H111Z" stroke="#F2EEE2" stroke-width="3"/>
+</g>
+<defs>
+<clipPath id="clip-cat-5">
+<rect width="224" height="224" fill="white"/>
+</clipPath>
+</defs>
+</svg>

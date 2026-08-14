@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AUP probes · Editorial Geometry</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+  <style>
+    :root {
+      --bg: #0e0f12;
+      --panel: #15161b;
+      --line: #2a2c34;
+      --ink: #f2f1ee;
+      --ink2: #c4c2bb;
+      --ink3: #8e8c85;
+      --serif: Georgia, "Iowan Old Style", Palatino, "Palatino Linotype", serif;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0 }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      line-height: 1.45;
+    }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 28px 20px 72px }
+    header h1 {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+    header p {
+      margin-top: 10px;
+      color: var(--ink2);
+      max-width: 42rem;
+      font-size: 0.95rem;
+    }
+    .note {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel);
+      color: var(--ink3);
+      font-size: 0.84rem;
+      max-width: 42rem;
+    }
+    .note code { color: var(--ink2); font-size: 0.8rem }
+    .layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 22px;
+      margin-top: 28px;
+    }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr } }
+    .side {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px;
+      height: fit-content;
+    }
+    .side h2 {
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      margin: 0 0 12px;
+      font-weight: 600;
+    }
+    .side h2 + h2, .block { margin-top: 22px }
+    .probes { display: flex; flex-direction: column; gap: 8px }
+    .probe-btn {
+      text-align: left;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--ink2);
+      border-radius: 10px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font: inherit;
+    }
+    .probe-btn:hover { border-color: #3d404a }
+    .probe-btn:focus-visible { outline: 2px solid var(--ink3); outline-offset: 2px }
+    .probe-btn strong {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--ink);
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    .probe-btn em {
+      display: block;
+      font-style: normal;
+      font-size: 0.76rem;
+      color: var(--ink3);
+      line-height: 1.35;
+    }
+    .probe-btn.on {
+      border-color: color-mix(in srgb, var(--probe-accent, #b9b7b0) 55%, var(--line));
+      background: color-mix(in srgb, var(--probe-accent, #b9b7b0) 14%, transparent);
+    }
+    .swatch {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--ink2);
+      margin: 14px 0 6px;
+    }
+    label span { color: var(--ink3); font-variant-numeric: tabular-nums }
+    input[type="range"] { width: 100%; accent-color: #c4c2bb }
+    .row { display: flex; gap: 8px; margin-top: 8px }
+    button.act {
+      flex: 1;
+      border: 1px solid var(--line);
+      background: var(--bg);
+      color: var(--ink);
+      border-radius: 8px;
+      padding: 9px 8px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.82rem;
+    }
+    button.act:hover { border-color: var(--ink3) }
+    button.act:focus-visible { outline: 2px solid var(--ink3); outline-offset: 2px }
+    button.act.on {
+      border-color: var(--ink3);
+      background: #1c1e25;
+    }
+    #seedDisp {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.72rem;
+      color: var(--ink3);
+      margin-top: 10px;
+      line-height: 1.5;
+      word-break: break-all;
+    }
+    .stage {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    #canvas-container {
+      width: min(100%, 640px);
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.38);
+    }
+    #canvas-container canvas {
+      display: block;
+      width: 100% !important;
+      height: auto !important;
+    }
+    .caption {
+      width: min(100%, 640px);
+      font-family: var(--serif);
+      font-size: 1.18rem;
+    }
+    .caption em {
+      display: block;
+      font-style: normal;
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      color: var(--ink3);
+      margin-top: 4px;
+    }
+    .checklist {
+      margin-top: 36px;
+      border-top: 1px solid var(--line);
+      padding-top: 24px;
+      max-width: 42rem;
+    }
+    .checklist h2 {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .checklist ul { color: var(--ink2); padding-left: 1.15rem; font-size: 0.92rem }
+    .checklist li { margin: 8px 0 }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Editorial Geometry · probes</h1>
+      <p>
+        One alphabet. Five category forces. Abstraction at Laws of UX altitude:
+        masses, edges, sequences, centers, breaks. Nothing depicts a job.
+      </p>
+      <div class="note">
+        Needs network once for p5.js. Philosophy:
+        <code>docs/designpowers/algorithmic-art/editorial-geometry-philosophy.md</code>
+        · Family <code>aup-editorial-v1</code> · Not wired into <code>index.html</code>.
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="side">
+        <h2>Probes</h2>
+        <div class="probes" id="probeList"></div>
+
+        <h2 class="block">Shared params</h2>
+        <label>Emptiness <span id="emptiness-v">0.58</span></label>
+        <input type="range" id="emptiness" min="0.40" max="0.78" step="0.01" value="0.58">
+
+        <label>Tension <span id="tension-v">0.62</span></label>
+        <input type="range" id="tension" min="0.25" max="1" step="0.01" value="0.62">
+
+        <label>Overlap <span id="overlap-v">0.32</span></label>
+        <input type="range" id="overlap" min="0.14" max="0.55" step="0.01" value="0.32">
+
+        <label>Theme</label>
+        <div class="row">
+          <button class="act" type="button" id="themeLight">Light paper</button>
+          <button class="act on" type="button" id="themeDark">Dark editorial</button>
+        </div>
+        <div class="row">
+          <button class="act" type="button" id="grayOn">Grayscale</button>
+          <button class="act on" type="button" id="grayOff">Hue on</button>
+        </div>
+
+        <label>Seed</label>
+        <div class="row">
+          <button class="act" type="button" id="prevSeed">Prev</button>
+          <button class="act" type="button" id="nextSeed">Next</button>
+        </div>
+        <div class="row">
+          <button class="act" type="button" id="randSeed">Random</button>
+          <button class="act" type="button" id="resetSeed">Reset to probe</button>
+        </div>
+        <div id="seedDisp"></div>
+        <div class="row" style="margin-top:18px">
+          <button class="act" type="button" id="dlPng">Download PNG</button>
+        </div>
+      </aside>
+
+      <main class="stage">
+        <div id="canvas-container"></div>
+        <div class="caption" id="caption"></div>
+      </main>
+    </div>
+
+    <section class="checklist">
+      <h2>Review checklist</h2>
+      <ul>
+        <li>LoUX-adjacent: poster calm, or still too diagrammatic?</li>
+        <li>One idea per still? Enough empty air (at least two-fifths)?</li>
+        <li>Same alphabet across five, or five styles?</li>
+        <li>With the title imagined beside it, does the force read without props?</li>
+        <li>Light and dark: same geometry, recolor only?</li>
+        <li>Grayscale: still distinct by structure?</li>
+        <li>Keep, tweak, or kill?</li>
+      </ul>
+    </section>
+  </div>
+
+  <script>
+    const PROBES = [
+      {
+        id: 1, name: "Identity & Delegation", hex: "#f59e0b", bias: "mandate",
+        ask: "What is this agent allowed to be?",
+        blurb: "Mandate boundary / figure vs field / permission edge",
+        seed: 566578788
+      },
+      {
+        id: 3, name: "Control & Steering", hex: "#f87171", bias: "vector",
+        ask: "How do people stay in charge?",
+        blurb: "Directed force / vector dominance",
+        seed: 481185840
+      },
+      {
+        id: 5, name: "Transparency of Process", hex: "#38bdf8", bias: "sequence",
+        ask: "What is it doing right now?",
+        blurb: "Sequence / stages as structure",
+        seed: 332830822
+      },
+      {
+        id: 7, name: "Multi-Agent Systems", hex: "#a78bfa", bias: "centers",
+        ask: "What happens when there is more than one?",
+        blurb: "Multiple centers / relay of influence",
+        seed: 492053502
+      },
+      {
+        id: 9, name: "Failure & Repair", hex: "#fb923c", bias: "break",
+        ask: "What happens when it gets it wrong?",
+        blurb: "Interrupted continuity / break then mend",
+        seed: 848816946
+      }
+    ];
+
+    const BIAS = {
+      mandate: {
+        axisW: { h: 0.30, v: 0.60, d: 0.10 },
+        field: { col: [3, 4], row: [4, 6], kind: { rect: 0.48, capsule: 0.40, circle: 0.12 } },
+        mute:  { col: [2, 3], row: [2, 3], kind: { rect: 0.42, capsule: 0.40, circle: 0.18 } },
+        force: "edge"
+      },
+      vector: {
+        axisW: { h: 0.28, v: 0.18, d: 0.54 },
+        field: { col: [2, 3], row: [3, 5], kind: { capsule: 0.50, rect: 0.38, circle: 0.12 } },
+        mute:  { col: [2, 3], row: [2, 3], kind: { rect: 0.40, capsule: 0.45, circle: 0.15 } },
+        force: "vector"
+      },
+      sequence: {
+        axisW: { h: 0.74, v: 0.22, d: 0.04 },
+        field: { col: [6, 8], row: [3, 4], kind: { rect: 0.62, capsule: 0.33, circle: 0.05 } },
+        mute:  { col: [5, 7], row: [1, 2], kind: { capsule: 0.55, rect: 0.40, circle: 0.05 } },
+        force: "sequence"
+      },
+      centers: {
+        axisW: { h: 0.78, v: 0.18, d: 0.04 },
+        field: { col: [3, 4], row: [3, 5], kind: { circle: 0.58, rect: 0.22, capsule: 0.20 } },
+        mute:  { col: [3, 4], row: [3, 5], kind: { circle: 0.58, rect: 0.22, capsule: 0.20 } },
+        force: "centers",
+        peer: true
+      },
+      break: {
+        axisW: { h: 0.50, v: 0.16, d: 0.34 },
+        field: { col: [6, 8], row: [2, 3], kind: { capsule: 0.52, rect: 0.28, circle: 0.20 } },
+        mute:  { col: [2, 3], row: [2, 3], kind: { rect: 0.42, capsule: 0.40, circle: 0.18 } },
+        force: "break"
+      }
+    };
+
+    let active = PROBES[0];
+    let params = {
+      seed: active.seed,
+      emptiness: 0.58,
+      tension: 0.62,
+      overlap: 0.32,
+      theme: "dark",
+      gray: false
+    };
+
+    const palettes = {
+      dark:  { canvas: "#15161b", fg: "#f2f1ee", muted: "#6e6c65", rule: "#8e8c85" },
+      light: { canvas: "#f7f4ee", fg: "#17181c", muted: "#8b877c", rule: "#6f6d66" }
+    };
+
+    function hexToRgb(h) {
+      const n = parseInt(h.slice(1), 16);
+      return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+    }
+    function rgbToHex(r, g, b) {
+      return "#" + [r, g, b].map(x => x.toString(16).padStart(2, "0")).join("");
+    }
+    function lerpHex(a, b, t) {
+      const pa = hexToRgb(a), pb = hexToRgb(b);
+      return rgbToHex(
+        Math.round(pa.r + (pb.r - pa.r) * t),
+        Math.round(pa.g + (pb.g - pa.g) * t),
+        Math.round(pa.b + (pb.b - pa.b) * t)
+      );
+    }
+    function accentForTheme(hex) {
+      return params.theme === "light" ? lerpHex(hex, "#17181c", 0.44) : hex;
+    }
+    function toGray(hex) {
+      const { r, g, b } = hexToRgb(hex);
+      const y = Math.round(0.2126 * r + 0.7152 * g + 0.0722 * b);
+      return rgbToHex(y, y, y);
+    }
+
+    const list = document.getElementById("probeList");
+    PROBES.forEach((pr, i) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "probe-btn" + (i === 0 ? " on" : "");
+      b.style.setProperty("--probe-accent", pr.hex);
+      b.setAttribute("aria-pressed", i === 0 ? "true" : "false");
+      b.innerHTML =
+        "<strong><i class=\"swatch\" style=\"background:" + pr.hex + "\"></i>" +
+        pr.id + ". " + pr.name + "</strong><em>" + pr.blurb + "</em>";
+      b.onclick = () => selectProbe(pr, b);
+      list.appendChild(b);
+    });
+
+    function selectProbe(pr, btn) {
+      active = pr;
+      params.seed = pr.seed;
+      document.querySelectorAll(".probe-btn").forEach(x => {
+        x.classList.remove("on");
+        x.setAttribute("aria-pressed", "false");
+      });
+      btn.classList.add("on");
+      btn.setAttribute("aria-pressed", "true");
+      updateCaption();
+      updateSeedDisp();
+      if (window._redrawArt) window._redrawArt();
+    }
+
+    function updateCaption() {
+      document.getElementById("caption").innerHTML =
+        "<strong>" + active.id + ". " + active.name + "</strong>" +
+        "<em>" + active.ask + " · force: " + active.bias + "</em>";
+    }
+    function updateSeedDisp() {
+      document.getElementById("seedDisp").textContent =
+        "seed " + params.seed +
+        (params.seed !== active.seed ? " (probe " + active.seed + ")" : "") +
+        "\naup-editorial-v1|" + active.id + "|" + active.hex;
+    }
+    function setOn(id, on) {
+      const el = document.getElementById(id);
+      el.classList.toggle("on", on);
+    }
+    function syncToggles() {
+      setOn("themeLight", params.theme === "light");
+      setOn("themeDark", params.theme === "dark");
+      setOn("grayOn", params.gray);
+      setOn("grayOff", !params.gray);
+    }
+    updateCaption();
+    updateSeedDisp();
+    syncToggles();
+
+    function bindSlider(id, key) {
+      const el = document.getElementById(id);
+      const lab = document.getElementById(id + "-v");
+      el.oninput = () => {
+        params[key] = parseFloat(el.value);
+        lab.textContent = el.value;
+        if (window._redrawArt) window._redrawArt();
+      };
+    }
+    bindSlider("emptiness", "emptiness");
+    bindSlider("tension", "tension");
+    bindSlider("overlap", "overlap");
+
+    document.getElementById("themeLight").onclick = () => {
+      params.theme = "light"; syncToggles(); if (window._redrawArt) window._redrawArt();
+    };
+    document.getElementById("themeDark").onclick = () => {
+      params.theme = "dark"; syncToggles(); if (window._redrawArt) window._redrawArt();
+    };
+    document.getElementById("grayOn").onclick = () => {
+      params.gray = true; syncToggles(); if (window._redrawArt) window._redrawArt();
+    };
+    document.getElementById("grayOff").onclick = () => {
+      params.gray = false; syncToggles(); if (window._redrawArt) window._redrawArt();
+    };
+    document.getElementById("prevSeed").onclick = () => {
+      params.seed = Math.max(1, params.seed - 1); updateSeedDisp(); if (window._redrawArt) window._redrawArt();
+    };
+    document.getElementById("nextSeed").onclick = () => {
+      params.seed += 1; updateSeedDisp(); if (window._redrawArt) window._redrawArt();
+    };
+    document.getElementById("randSeed").onclick = () => {
+      params.seed = Math.floor(Math.random() * 900000000) + 1;
+      updateSeedDisp(); if (window._redrawArt) window._redrawArt();
+    };
+    document.getElementById("resetSeed").onclick = () => {
+      params.seed = active.seed; updateSeedDisp(); if (window._redrawArt) window._redrawArt();
+    };
+    document.getElementById("dlPng").onclick = () => { if (window._saveArt) window._saveArt(); };
+
+    const sketch = (p) => {
+      const S = 800;
+      let g;
+
+      p.setup = () => {
+        const c = p.createCanvas(S, S);
+        c.parent("canvas-container");
+        g = p.createGraphics(S, S);
+        g.strokeCap(p.ROUND);
+        g.strokeJoin(p.ROUND);
+        p.noLoop();
+        window._redrawArt = () => { compose(); p.redraw(); };
+        window._saveArt = () => p.saveCanvas(
+          "aup-probe-" + active.id + "-" + params.seed + "-" + params.theme,
+          "png"
+        );
+        compose();
+      };
+
+      p.draw = () => { p.image(g, 0, 0); };
+
+      function snap(v) { return Math.round(v / 8) * 8; }
+      function irand(a, b) {
+        if (b < a) { const t = a; a = b; b = t; }
+        return a + Math.floor(p.random() * (b - a + 1));
+      }
+      function pickW(obj) {
+        const keys = Object.keys(obj);
+        let s = 0;
+        for (let i = 0; i < keys.length; i++) s += obj[keys[i]];
+        let r = p.random() * s;
+        for (let i = 0; i < keys.length; i++) {
+          r -= obj[keys[i]];
+          if (r <= 0) return keys[i];
+        }
+        return keys[keys.length - 1];
+      }
+      function pal() {
+        const base = palettes[params.theme];
+        let accent = accentForTheme(active.hex);
+        if (params.gray) {
+          return {
+            canvas: toGray(base.canvas),
+            fg: toGray(base.fg),
+            muted: toGray(base.muted),
+            rule: toGray(base.rule),
+            accent: toGray(accent)
+          };
+        }
+        return { canvas: base.canvas, fg: base.fg, muted: base.muted, rule: base.rule, accent: accent };
+      }
+      function col(hex, a) {
+        const { r, g: gg, b } = hexToRgb(hex);
+        return p.color(r, gg, b, a * 255);
+      }
+
+      function makeGrid() {
+        const empty = params.emptiness;
+        const m = snap(p.lerp(52, 128, (empty - 0.4) / 0.38));
+        const cell = Math.max(32, snap((S - 2 * m) / 8));
+        const ox = snap((S - cell * 8) / 2);
+        return {
+          cell: cell,
+          ox: ox,
+          oy: ox,
+          X: (c) => ox + c * cell,
+          Y: (r) => ox + r * cell,
+          W: (n) => n * cell
+        };
+      }
+
+      function span(spec, shrink) {
+        const c0 = spec.col[0];
+        const c1 = Math.max(c0, spec.col[1] - shrink);
+        const r0 = spec.row[0];
+        const r1 = Math.max(r0, spec.row[1] - shrink);
+        return { cols: irand(c0, c1), rows: irand(r0, r1) };
+      }
+
+      function massAt(G, kind, c, r, cols, rows, inset) {
+        const pad = inset || 0;
+        let x = G.X(c) + pad;
+        let y = G.Y(r) + pad;
+        let w = G.W(cols) - pad * 2;
+        let h = G.W(rows) - pad * 2;
+        if (w < 24) { x = G.X(c); w = G.W(cols); }
+        if (h < 24) { y = G.Y(r); h = G.W(rows); }
+        return { kind: kind, x: snap(x), y: snap(y), w: snap(w), h: snap(h), c: c, r: r, cols: cols, rows: rows };
+      }
+
+      function placeOnSide(G, spec, side, shrink, inset) {
+        const sp = span(spec, shrink);
+        let c, r;
+        if (side === "left") { c = 0; r = irand(0, 8 - sp.rows); }
+        else if (side === "right") { c = 8 - sp.cols; r = irand(0, 8 - sp.rows); }
+        else if (side === "top") { r = 0; c = irand(0, 8 - sp.cols); }
+        else if (side === "bottom") { r = 8 - sp.rows; c = irand(0, 8 - sp.cols); }
+        else if (side === "tl") { c = 0; r = 0; }
+        else if (side === "tr") { c = 8 - sp.cols; r = 0; }
+        else if (side === "bl") { c = 0; r = 8 - sp.rows; }
+        else if (side === "br") { c = 8 - sp.cols; r = 8 - sp.rows; }
+        else if (side === "band") {
+          c = irand(0, Math.max(0, 8 - sp.cols));
+          r = irand(2, Math.max(2, 8 - sp.rows - 2));
+        } else {
+          c = irand(0, Math.max(0, 8 - sp.cols));
+          r = irand(0, Math.max(0, 8 - sp.rows));
+        }
+        return massAt(G, pickW(spec.kind), c, r, sp.cols, sp.rows, inset);
+      }
+
+      function opposite(side) {
+        return { left: "right", right: "left", top: "bottom", bottom: "top" }[side] || "free";
+      }
+
+      function step8(ang, len) {
+        const a = ((ang % 360) + 360) % 360;
+        const L = snap(len);
+        const d = snap(L * 0.707);
+        if (a === 0) return { dx: L, dy: 0 };
+        if (a === 90) return { dx: 0, dy: L };
+        if (a === 180) return { dx: -L, dy: 0 };
+        if (a === 270) return { dx: 0, dy: -L };
+        if (a === 45) return { dx: d, dy: d };
+        if (a === 135) return { dx: -d, dy: d };
+        if (a === 225) return { dx: -d, dy: -d };
+        if (a === 315) return { dx: d, dy: -d };
+        return { dx: L, dy: 0 };
+      }
+
+      function cx(m) { return m.x + m.w / 2; }
+      function cy(m) { return m.y + m.h / 2; }
+
+      function buildGeom() {
+        const cfg = BIAS[active.bias];
+        const t = params.tension;
+        const empty = params.emptiness;
+        const G = makeGrid();
+        const shrink = empty > 0.62 ? 1 : 0;
+        const axis = pickW(cfg.axisW);
+        const flipX = p.random() < 0.5;
+        const flipY = p.random() < 0.5;
+
+        let field, mute, force, accent;
+        const insetF = 8;
+        const insetM = 12;
+
+        if (cfg.force === "edge") {
+          const split = (axis === "h") ? (flipY ? "bottom" : "top") : (flipX ? "right" : "left");
+          field = placeOnSide(G, cfg.field, split, shrink, insetF);
+          mute = placeOnSide(G, cfg.mute, opposite(split), shrink, insetM);
+          const vertical = split === "left" || split === "right";
+          const edgeX = split === "left" ? field.x + field.w : split === "right" ? field.x : snap(cx(field));
+          const edgeY = split === "top" ? field.y + field.h : split === "bottom" ? field.y : snap(cy(field));
+          const figD = snap(G.cell * (1.35 + t * 0.45));
+          const along = p.random();
+          const into = snap(figD * 0.22);
+          let fx, fy, ax, ay;
+          if (vertical) {
+            fx = snap(edgeX + (split === "left" ? -into : into));
+            fy = snap(field.y + field.h * (0.28 + along * 0.44));
+            ax = snap(edgeX);
+            ay = fy;
+          } else {
+            fx = snap(field.x + field.w * (0.28 + along * 0.44));
+            fy = snap(edgeY + (split === "top" ? -into : into));
+            ax = fx;
+            ay = snap(edgeY);
+          }
+          const y1 = vertical ? snap(G.Y(1)) : edgeY;
+          const y2 = vertical ? snap(G.Y(7)) : edgeY;
+          const x1 = vertical ? edgeX : snap(G.X(1));
+          const x2 = vertical ? edgeX : snap(G.X(7));
+          force = { type: "edge", vertical: vertical, x1: x1, y1: y1, x2: x2, y2: y2, fig: { x: fx, y: fy, d: figD } };
+          accent = { kind: "circle", x: ax, y: ay, d: snap(28 + t * 12) };
+        } else if (cfg.force === "vector") {
+          const corner = (flipY ? "b" : "t") + (flipX ? "r" : "l");
+          field = placeOnSide(G, cfg.field, corner, shrink, insetF);
+          const anti = (flipY ? "t" : "b") + (flipX ? "l" : "r");
+          mute = placeOnSide(G, cfg.mute, anti, shrink, insetM);
+          let ang;
+          if (axis === "h") ang = flipX ? 180 : 0;
+          else if (axis === "v") ang = flipY ? 270 : 90;
+          else {
+            if (!flipX && !flipY) ang = 45;
+            else if (flipX && !flipY) ang = 135;
+            else if (!flipX && flipY) ang = 315;
+            else ang = 225;
+          }
+          const origin = { x: snap(cx(field)), y: snap(cy(field)) };
+          const n = 2 + (t > 0.58 && p.random() < 0.7 ? 1 : 0);
+          const len = snap(G.cell * (3.2 + t * 1.6));
+          const st = step8(ang, len);
+          const space = snap(20 + t * 14);
+          const perp = step8((ang + 90) % 360, space * (n - 1));
+          const rules = [];
+          for (let i = 0; i < n; i++) {
+            const ox = snap(-perp.dx / 2 + (n === 1 ? 0 : (perp.dx / (n - 1)) * i));
+            const oy = snap(-perp.dy / 2 + (n === 1 ? 0 : (perp.dy / (n - 1)) * i));
+            rules.push({
+              x1: origin.x + ox,
+              y1: origin.y + oy,
+              x2: origin.x + st.dx + ox,
+              y2: origin.y + st.dy + oy
+            });
+          }
+          const tip = rules[0];
+          force = { type: "vector", ang: ang, rules: rules };
+          accent = { kind: "triangle", x: snap(tip.x2), y: snap(tip.y2), d: snap(34 + t * 10), ang: ang };
+        } else if (cfg.force === "sequence") {
+          const horiz = axis !== "v";
+          if (horiz) {
+            field = placeOnSide(G, cfg.field, "band", shrink, 0);
+          } else {
+            const tall = { col: cfg.field.row, row: cfg.field.col, kind: cfg.field.kind };
+            field = placeOnSide(G, tall, flipX ? "right" : "left", shrink, 0);
+          }
+          const n = (t > 0.5 && field.cols >= 7 && p.random() < 0.55) ? 4 : 3;
+          const stage = horiz
+            ? { cols: 1, rows: Math.min(2, field.rows) }
+            : { cols: Math.min(2, field.cols), rows: 1 };
+          const gap = 1;
+          const total = horiz
+            ? n * stage.cols + (n - 1) * gap
+            : n * stage.rows + (n - 1) * gap;
+          let c0, r0;
+          if (horiz) {
+            c0 = field.c + Math.max(0, Math.floor((field.cols - total) / 2));
+            r0 = field.r + Math.max(0, Math.floor((field.rows - stage.rows) / 2));
+            if (c0 + total > 8) c0 = Math.max(0, 8 - total);
+          } else {
+            c0 = field.c + Math.max(0, Math.floor((field.cols - stage.cols) / 2));
+            r0 = field.r + Math.max(0, Math.floor((field.rows - total) / 2));
+            if (r0 + total > 8) r0 = Math.max(0, 8 - total);
+          }
+          const stages = [];
+          for (let i = 0; i < n; i++) {
+            const c = horiz ? c0 + i * (stage.cols + gap) : c0;
+            const r = horiz ? r0 : r0 + i * (stage.rows + gap);
+            stages.push(massAt(G, "rect", c, r, stage.cols, stage.rows, 10));
+          }
+          const last = stages[stages.length - 1];
+          mute = placeOnSide(G, cfg.mute, horiz ? "bottom" : "right", shrink, insetM);
+          if (horiz) {
+            const below = field.r + field.rows;
+            if (below <= 6) {
+              const rows = Math.min(mute.rows, 8 - below);
+              if (rows >= 1) mute = massAt(G, mute.kind, mute.c, below, mute.cols, rows, insetM);
+            } else if (field.r >= 2) {
+              const rows = Math.min(mute.rows, field.r);
+              mute = massAt(G, mute.kind, mute.c, 0, mute.cols, rows, insetM);
+            }
+          }
+          force = { type: "sequence", stages: stages };
+          accent = { kind: "rect", x: last.x, y: last.y, w: last.w, h: last.h };
+        } else if (cfg.force === "centers") {
+          const horiz = axis !== "v";
+          const gapBoost = t > 0.55 ? 1 : 0;
+          if (horiz) {
+            field = placeOnSide(G, cfg.field, "left", shrink, insetF);
+            mute = placeOnSide(G, cfg.mute, "right", shrink, insetF);
+            const align = irand(-1, 1);
+            const nr = Math.max(0, Math.min(8 - mute.rows, field.r + align));
+            mute = massAt(G, mute.kind, mute.c, nr, mute.cols, mute.rows, insetF);
+            if (mute.c < field.c + field.cols + gapBoost) {
+              mute = massAt(G, mute.kind, Math.min(8 - mute.cols, field.c + field.cols + 1 + gapBoost), mute.r, mute.cols, mute.rows, insetF);
+            }
+          } else {
+            field = placeOnSide(G, cfg.field, "top", shrink, insetF);
+            mute = placeOnSide(G, cfg.mute, "bottom", shrink, insetF);
+          }
+          const ra = snap(Math.min(field.w, field.h) * 0.42);
+          const rb = snap(Math.min(mute.w, mute.h) * 0.42);
+          const a = { x: snap(cx(field)), y: snap(cy(field)), r: ra };
+          const b = { x: snap(cx(mute)), y: snap(cy(mute)), r: rb };
+          const mx = snap((a.x + b.x) / 2);
+          const my = snap((a.y + b.y) / 2);
+          force = { type: "centers", a: a, b: b };
+          accent = { kind: "capsule", x: mx - 28, y: my - 12, w: 56, h: 24 };
+        } else {
+          field = placeOnSide(G, cfg.field, axis === "v" ? "left" : "band", shrink, insetF);
+          mute = placeOnSide(G, cfg.mute, axis === "v" ? "right" : "bottom", shrink, insetM);
+          const mode = pickW({ rule: 0.38, capsule: 0.32, arc: 0.30 });
+          const gap = snap(p.lerp(24, 80, t));
+          if (mode === "arc") {
+            const d = snap(G.cell * (3.4 + t * 0.8));
+            const acx = snap(S / 2 + (p.random() - 0.5) * G.cell);
+            const acy = snap(S / 2 + (p.random() - 0.5) * G.cell * 0.6);
+            const start = [0, p.HALF_PI, p.PI, p.HALF_PI * 3][irand(0, 3)];
+            const sweep = p.PI * p.lerp(1.15, 1.55, 1 - t * 0.35);
+            const gapAng = start + sweep + (p.TWO_PI - sweep) * 0.5;
+            force = { type: "break", mode: "arc", cx: acx, cy: acy, d: d, start: start, sweep: sweep };
+            accent = {
+              kind: "circle",
+              x: snap(acx + Math.cos(gapAng) * d * 0.5),
+              y: snap(acy + Math.sin(gapAng) * d * 0.5),
+              d: snap(26 + t * 10)
+            };
+          } else {
+            const horiz = axis !== "v";
+            const x1 = horiz ? snap(field.x) : snap(cx(field));
+            const y1 = horiz ? snap(cy(field)) : snap(field.y);
+            const x2 = horiz ? snap(field.x + field.w) : snap(cx(field));
+            const y2 = horiz ? snap(cy(field)) : snap(field.y + field.h);
+            const mid = p.random() * 0.3 + 0.35;
+            const mx = snap(x1 + (x2 - x1) * mid);
+            const my = snap(y1 + (y2 - y1) * mid);
+            const hx = horiz ? gap / 2 : 0;
+            const hy = horiz ? 0 : gap / 2;
+            force = {
+              type: "break",
+              mode: mode,
+              a: { x1: x1, y1: y1, x2: snap(mx - hx), y2: snap(my - hy) },
+              b: { x1: snap(mx + hx), y1: snap(my + hy), x2: x2, y2: y2 },
+              thick: mode === "capsule"
+            };
+            accent = { kind: "circle", x: mx, y: my, d: snap(26 + t * 10) };
+          }
+        }
+
+        const nSat = 1 + Math.floor(p.random() * (empty > 0.64 ? 1.35 : 2.4));
+        const sats = [];
+        const kinds = ["circle", "capsule", "rect"];
+        let tries = 0;
+        while (sats.length < nSat && tries < 28) {
+          tries++;
+          const c = irand(0, 6);
+          const r = irand(0, 6);
+          const x = G.X(c);
+          const y = G.Y(r);
+          const hitField = x + G.cell * 0.4 > field.x && x < field.x + field.w && y + G.cell * 0.4 > field.y && y < field.y + field.h;
+          const hitMute = x + G.cell * 0.4 > mute.x && x < mute.x + mute.w && y + G.cell * 0.4 > mute.y && y < mute.y + mute.h;
+          if (hitField || hitMute) continue;
+          const k = kinds[irand(0, 2)];
+          const s = snap(24 + (1 - empty) * 28);
+          if (k === "circle") sats.push({ kind: k, x: x, y: y, w: s, h: s });
+          else if (k === "capsule") sats.push({ kind: k, x: x, y: y, w: snap(s * 1.8), h: snap(s * 0.42) });
+          else sats.push({ kind: k, x: x, y: y, w: s, h: snap(s * 0.72) });
+        }
+
+        return { field: field, mute: mute, force: force, accent: accent, sats: sats };
+      }
+
+      function rounded(x, y, w, h, r) {
+        g.rect(x, y, w, h, Math.min(r, w / 2, h / 2));
+      }
+
+      function drawMass(m, fillCol) {
+        g.noStroke();
+        g.fill(fillCol);
+        if (m.kind === "circle") {
+          const d = Math.min(m.w, m.h);
+          g.circle(m.x + m.w / 2, m.y + m.h / 2, d);
+        } else if (m.kind === "capsule") {
+          rounded(m.x, m.y, m.w, m.h, Math.min(m.w, m.h) / 2);
+        } else {
+          rounded(m.x, m.y, m.w, m.h, Math.min(40, m.w / 5, m.h / 5));
+        }
+      }
+
+      function drawTri(tx, ty, size, ang) {
+        const rad = ang * Math.PI / 180;
+        const back = size * 0.9;
+        const b1 = rad + 2.45;
+        const b2 = rad - 2.45;
+        g.triangle(
+          tx, ty,
+          tx - Math.cos(b1) * back, ty - Math.sin(b1) * back,
+          tx - Math.cos(b2) * back, ty - Math.sin(b2) * back
+        );
+      }
+
+      function drawForce(force, C, ov) {
+        if (force.type === "edge") {
+          g.noFill();
+          g.stroke(col(C.rule, 0.78));
+          g.strokeWeight(3);
+          g.line(force.x1, force.y1, force.x2, force.y2);
+          g.fill(col(C.fg, 0.10 + ov * 0.08));
+          g.stroke(col(C.fg, 0.88));
+          g.strokeWeight(4);
+          g.circle(force.fig.x, force.fig.y, force.fig.d);
+        } else if (force.type === "vector") {
+          g.noFill();
+          g.stroke(col(C.fg, 0.55));
+          g.strokeWeight(5);
+          force.rules.forEach(r => g.line(r.x1, r.y1, r.x2, r.y2));
+        } else if (force.type === "sequence") {
+          g.noStroke();
+          force.stages.forEach((st, i) => {
+            const last = i === force.stages.length - 1;
+            g.fill(col(C.fg, last ? 0.08 : 0.16 + i * 0.07));
+            rounded(st.x, st.y, st.w, st.h, 14);
+          });
+        } else if (force.type === "centers") {
+          g.noFill();
+          g.stroke(col(C.fg, 0.58));
+          g.strokeWeight(3);
+          g.circle(force.a.x, force.a.y, force.a.r * 2);
+          g.circle(force.b.x, force.b.y, force.b.r * 2);
+          g.stroke(col(C.rule, 0.82));
+          g.strokeWeight(3);
+          const dx = force.b.x - force.a.x;
+          const dy = force.b.y - force.a.y;
+          const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+          const ux = dx / dist, uy = dy / dist;
+          g.line(
+            force.a.x + ux * force.a.r * 0.55,
+            force.a.y + uy * force.a.r * 0.55,
+            force.b.x - ux * force.b.r * 0.55,
+            force.b.y - uy * force.b.r * 0.55
+          );
+        } else if (force.type === "break") {
+          if (force.mode === "arc") {
+            g.noFill();
+            g.stroke(col(C.fg, 0.72));
+            g.strokeWeight(5);
+            g.arc(force.cx, force.cy, force.d, force.d, force.start, force.start + force.sweep);
+          } else {
+            g.stroke(col(C.fg, 0.72));
+            g.strokeWeight(force.thick ? 14 : 5);
+            if (force.thick) g.strokeCap(p.ROUND);
+            g.line(force.a.x1, force.a.y1, force.a.x2, force.a.y2);
+            g.line(force.b.x1, force.b.y1, force.b.x2, force.b.y2);
+            g.strokeCap(p.ROUND);
+          }
+        }
+      }
+
+      function drawAccent(a, C) {
+        g.noStroke();
+        g.fill(C.accent);
+        if (a.kind === "circle") g.circle(a.x, a.y, a.d);
+        else if (a.kind === "triangle") drawTri(a.x, a.y, a.d, a.ang);
+        else if (a.kind === "capsule") rounded(a.x, a.y, a.w, a.h, Math.min(a.w, a.h) / 2);
+        else rounded(a.x, a.y, a.w, a.h, 14);
+      }
+
+      function compose() {
+        p.randomSeed(params.seed);
+        p.noiseSeed(params.seed);
+        const C = pal();
+        const ov = params.overlap;
+        const geom = buildGeom();
+
+        g.clear();
+        g.background(C.canvas);
+        g.noStroke();
+
+        drawMass(geom.field, col(C.muted, 0.22 + ov * 0.38));
+        drawMass(geom.mute, col(C.muted, 0.30 + ov * 0.18));
+        geom.sats.forEach(s => drawMass(s, col(C.fg, 0.07 + ov * 0.10)));
+        drawForce(geom.force, C, ov);
+        drawAccent(geom.accent, C);
+      }
+    };
+
+    new p5(sketch);
+  </script>
+</body>
+</html>

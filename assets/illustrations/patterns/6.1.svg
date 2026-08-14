@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224 224" fill="none" aria-hidden="true">
+<g clip-path="url(#clip-pat-6-1)">
+<path d="M224 0H0V224H224V0Z" fill="#5D8028"/>
+<path d="M210 169.5H12V212H210V169.5Z" fill="#F2EEE2"/>
+<path d="M54.5 12H12V54.5H54.5V12Z" fill="#F2EEE2"/>
+<path d="M107 12H64.5V54.5H107V12Z" fill="#F2EEE2" fill-opacity="0.75"/>
+<path d="M159.5 12H117V54.5H159.5V12Z" fill="#F2EEE2" fill-opacity="0.25"/>
+<path d="M210 14V52.5H171.5V14H210Z" fill="black" fill-opacity="0.2"/>
+<path d="M54.5 64.5H12V107H54.5V64.5Z" fill="#F2EEE2"/>
+<path d="M107 64.5H64.5V107H107V64.5Z" fill="#F2EEE2" fill-opacity="0.75"/>
+<path d="M159.5 64.5H117V107H159.5V64.5Z" fill="#F2EEE2" fill-opacity="0.25"/>
+<path d="M210 66.5V105H171.5V66.5H210Z" fill="black" fill-opacity="0.2"/>
+<path d="M54.5 117H12V159.5H54.5V117Z" fill="#F2EEE2"/>
+<path d="M107 117H64.5V159.5H107V117Z" fill="#F2EEE2" fill-opacity="0.75"/>
+<path d="M159.5 117H117V159.5H159.5V117Z" fill="#F2EEE2" fill-opacity="0.25"/>
+<path d="M210 119V157.5H171.5V119H210Z" fill="black" fill-opacity="0.2"/>
+</g>
+<defs>
+<clipPath id="clip-pat-6-1">
+<rect width="224" height="224" fill="white"/>
+</clipPath>
+</defs>
+</svg>
