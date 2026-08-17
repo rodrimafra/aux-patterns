@@ -27,7 +27,18 @@
     "relatedCats": "Related categories",
     "onPage": "On this page",
     "prevPat": "Previous",
-    "nextPat": "Next pattern"
+    "nextPat": "Next pattern",
+    "skip": "Skip to patterns",
+    "contact": "Contact",
+    "license": "License",
+    "footNav": "Footer",
+    "contactName": "Name",
+    "contactEmail": "Email",
+    "contactSubject": "Subject",
+    "contactMessage": "Message",
+    "contactSend": "Send",
+    "contactSent": "Opening your email app to send this to Rodrigo.",
+    "contactNeed": "Please fill in name, email, subject, and message."
   },
   "pt": {
     "lang": "pt-BR",
@@ -57,6 +68,17 @@
     "relatedCats": "Categorias relacionadas",
     "onPage": "Nesta página",
     "prevPat": "Anterior",
-    "nextPat": "Próximo padrão"
+    "nextPat": "Próximo padrão",
+    "skip": "Ir para os padrões",
+    "contact": "Contato",
+    "license": "Licença",
+    "footNav": "Rodapé",
+    "contactName": "Nome",
+    "contactEmail": "E-mail",
+    "contactSubject": "Assunto",
+    "contactMessage": "Mensagem",
+    "contactSend": "Enviar",
+    "contactSent": "Abrindo seu aplicativo de e-mail para enviar ao Rodrigo.",
+    "contactNeed": "Preencha nome, e-mail, assunto e mensagem."
   }
 }
