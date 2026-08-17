@@ -1,0 +1,8 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <path fill="currentColor" fill-rule="evenodd" d="M50 14c19.882 0 36 16.118 36 36s-16.118 36-36 36S14 69.882 14 50 30.118 14 50 14zm-12 24h24v24H38z"/>
+  <g stroke="currentColor" stroke-width="2.5" stroke-linecap="square">
+    <line x1="38" y1="44" x2="62" y2="44"/>
+    <line x1="38" y1="50" x2="62" y2="50"/>
+    <line x1="38" y1="56" x2="62" y2="56"/>
+  </g>
+</svg>

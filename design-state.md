@@ -34,6 +34,18 @@ Standing project constraints:
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
+| 2026-08-17 | Alt master-symbol direction scout completed (inspiration only; P1 remains locked) | Moodboard proposes two competing directions vs keyhole seal: **Open Caliper** (open jaws hold) and **Punched Plate** (mass + counterform stamp). Artifact: `docs/designpowers/inspiration/2026-08-17-master-symbol-alt-directions.md`. No redraw; next is human Figma probes A1-A3 / B1-B3. |
+| 2026-08-17 | Master-symbol alphabet: circle/round = human, sharp square = agent | Owner: judgement practices for designing AI agents. Chase coin lesson kept as counterform/mass, not octagon clone. HTML probes before Figma: `docs/designpowers/probes/2026-08-17-master-symbol-circle-square.html` (M1 Coin, M2 Caliper, M3 Soft plate). |
+| 2026-08-17 | Alphabet rule added: lines = controlling the agent | Logo-generator skill Phase 2: 6 variants (V1–V6) with human/agent/control grammar. Probe: `docs/designpowers/probes/2026-08-17-master-symbol-logo-generator.html`. SVGs: `assets/illustrations/mark/logo-generator/`. |
+| 2026-08-17 | Agent shape pivot: triangle (point up) replaces square; reads as letter A | V1 Gate selected as baseline. Square retired for agent role. Three iterates: T1 Gate A, T2 Vertex Rein, T3 Letter Bar. Probe: `docs/designpowers/probes/2026-08-17-master-symbol-v1-triangle.html`. Alphabet now: round = human, triangle = agent, lines = control. |
+| 2026-08-17 | T3 Letter Bar locked and sent to Figma for refinement | Component set `aux-master-symbol-t3` (`94:207`) modes dark (`94:193`) / light (`94:200`). Probe board `probe/master-symbol-T3` (`94:208`) with 16/32/64/224 + white/cream/night grounds. Edit component; do not detach. P1 keyhole set remains as prior direction. |
+| 2026-08-17 | Category art brand alphabet strategy + probes (provisional) | Round=human, triangle=agent, lines=control (curves OK), square=frame only. φ stills grammar. Logo-generator probe SVGs for cats 3/1/10 A–C. Strategy: `docs/designpowers/strategy/2026-08-17-category-art-brand-alphabet.md`. Board: `docs/designpowers/probes/2026-08-17-category-art-alphabet.html`. SVGs: `assets/illustrations/categories/probes-alphabet/`. Await look-then-pick. |
+| 2026-08-17 | **FINAL master mark locked** on `aux-master-symbol` (`89:559`) | Owner refined Letter-A seal in Figma. Round = human, triangle = agent (A), lines = control (crossbar + base). `mode=dark` cream `#F2EEE2` (`85:109`); `mode=light` ink `#0D0D0D` (`89:560`). Union plate 168 on 224 canvas. Repo: `assets/illustrations/mark/aux-master-symbol.svg` (+ plate-168, mode-dark, mode-light). Keyhole P1 superseded (`archive-keyhole-figma-152.svg`). |
+| 2026-08-17 | Master mark on home hero + favicon | Inline plate-168 beside home `h1` (`currentColor`: cream dark / ink light). Hidden on category hubs. `favicon.svg` at repo root with `prefers-color-scheme`. |
+| 2026-08-17 | Master mark moved to top nav | 40px home control, left of topbar. Cream on dark / ink on light; cream on category hubs. Click returns home. Favicon unchanged. |
+| 2026-08-17 | Default color mode is dark | First visit and any non-`light` stored value load dark. Light only after explicit toggle. `color-scheme` meta follows the active theme. |
+| 2026-08-17 | Master symbol P1 locked in Figma as component `aux-master-symbol` (`85:109`) | Probe `probe/master-symbol-P1` (`86:109`) uses instances at 16/32/64/224 plus white/cream/night grounds. Edit the component; do not detach. Sketch 152 renamed `aux-master-symbol/figma-152` (`82:109`). Page: 🧱 Components. Superseded by FINAL Letter-A seal on the same component set. |
+| 2026-08-17 | Path presentations include visual probes before a pick | Owner: review by looking, then select. Text-only forks are incomplete. Probe page for master-symbol A/B/C: `docs/designpowers/probes/2026-08-17-master-symbol-paths.html` |
 | 2026-08-14 | Home = 10 category cards; category page = hub (hero + question + pattern cards + related/next); keep pattern dialog | Owner lock: Figma home is visual source of truth; LoUX detail frame donates structure only |
 | 2026-08-14 | Implement in `index.html` now; skip further Figma drafting this pass | Owner chose html_now |
 | 2026-08-13 | Craft uplift, not full Laws of UX visual mirror | Keep deliberate identity; port qualities only |
@@ -175,6 +187,16 @@ Resolved this pass: analogy domains; `--illu-*` twins; viewBox 320×200 (probe, 
 - Phase A verification: `docs/designpowers/verification/2026-08-13-illustration-phase-a.md`
 - GitHub: https://github.com/rodrimafra/aux-patterns
 - **Resume checkpoint (2026-08-13 stop, superseded 2026-08-14 Phase B):** `docs/designpowers/handoff/2026-08-13-illustration-checkpoint.md`
+- **FINAL master mark (2026-08-17):** Figma `aux-master-symbol` [`89:559`](https://www.figma.com/design/g81CTKZNVjYAqhjdVEPji4/Untitled?node-id=89-559); repo `assets/illustrations/mark/aux-master-symbol.svg`, `aux-master-symbol-plate-168.svg` (`currentColor`), `aux-master-symbol-mode-dark.svg`, `aux-master-symbol-mode-light.svg`
+- Category art alphabet strategy + probes (2026-08-17): `docs/designpowers/strategy/2026-08-17-category-art-brand-alphabet.md`, probe `docs/designpowers/probes/2026-08-17-category-art-alphabet.html`, SVGs `assets/illustrations/categories/probes-alphabet/`
+- Master symbol T3 Letter Bar in Figma (2026-08-17): component set `aux-master-symbol-t3` `94:207`; probe `probe/master-symbol-T3` `94:208` (exploration; final lives on `89:559`)
+- Master symbol V1 triangle iterates T1–T3 (2026-08-17): `docs/designpowers/probes/2026-08-17-master-symbol-v1-triangle.html` + `assets/illustrations/mark/logo-generator/t{1,2,3}-*.svg`
+- Master symbol logo-generator V1–V6 (2026-08-17): `docs/designpowers/probes/2026-08-17-master-symbol-logo-generator.html` + `assets/illustrations/mark/logo-generator/`
+- Master symbol circle/square probes (2026-08-17): `docs/designpowers/probes/2026-08-17-master-symbol-circle-square.html`
+- Master symbol alt directions moodboard (2026-08-17): `docs/designpowers/inspiration/2026-08-17-master-symbol-alt-directions.md` (Open Caliper + Punched Plate; compete with locked keyhole seal)
+- Master symbol path probes (2026-08-17): `docs/designpowers/probes/2026-08-17-master-symbol-paths.html`
+- Master symbol B2 phi refine: `docs/designpowers/probes/2026-08-17-master-symbol-b2-phi.html`
+- Superseded keyhole: `assets/illustrations/mark/archive-keyhole-figma-152.svg` (and `aux-master-symbol-figma-152.svg`)
 - Phase B plan: `docs/designpowers/plans/2026-08-14-illustration-phase-b-plan.md`
 - Pattern stills: `assets/illustrations/patterns/{n}.svg` (49), review `docs/designpowers/probes/2026-08-14-pattern-stills-strip.html`
 

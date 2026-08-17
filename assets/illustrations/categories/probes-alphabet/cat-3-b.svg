@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224 224" fill="none" aria-hidden="true">
+  <rect width="224" height="224" fill="#B15556"/>
+  <!-- Four control paths: purposeful curves, stroke 2, cream -->
+  <path d="M24 56 C64 56, 80 96, 112 96 C144 96, 160 56, 200 56" stroke="#F2EEE2" stroke-width="2" stroke-linecap="round"/>
+  <path d="M24 96 C64 96, 80 136, 112 136 C144 136, 160 96, 200 96" stroke="#F2EEE2" stroke-width="2" stroke-linecap="round" opacity="0.62"/>
+  <path d="M24 136 C64 136, 80 176, 112 176 C144 176, 160 136, 200 136" stroke="#F2EEE2" stroke-width="2" stroke-linecap="round" opacity="0.38"/>
+  <path d="M40 176 C72 168, 96 152, 128 144 C160 136, 176 152, 200 168" stroke="#F2EEE2" stroke-width="2" stroke-linecap="round" opacity="0.62"/>
+  <!-- Four agent triangles (point up), size ~16–24, on paths -->
+  <polygon points="64,48 72,64 56,64" fill="#F2EEE2"/>
+  <polygon points="112,80 124,104 100,104" fill="#F2EEE2"/>
+  <polygon points="160,48 168,64 152,64" fill="#F2EEE2"/>
+  <polygon points="128,128 140,152 116,152" fill="#F2EEE2"/>
+</svg>
