@@ -232,22 +232,23 @@
     }
     .psec {
       display: grid;
-      grid-template-columns: 96px 1fr;
+      grid-template-columns: 48px 1fr;
       gap: var(--s3);
       padding: var(--s5) 0;
-      border-bottom: 1px solid var(--line);
       scroll-margin-top: 24px
     }
     .psec-thumb {
-      width: 96px; height: 96px;
-      display: grid; place-items: center;
-      color: var(--ink2); background: transparent
+      width: 48px; height: 48px;
+      overflow: hidden;
+      background: none;
+      --thumb-mark: #F2EEE2;
+      --thumb-rule: #0D0D0D
     }
-    .psec-thumb svg { width: 88px; height: 88px; display: block }
-    .psec-num {
-      font-size: var(--t-sm); letter-spacing: .08em; color: var(--ink3);
-      font-family: var(--sans); margin-bottom: 6px
+    [data-theme="dark"] .psec-thumb {
+      --thumb-mark: color-mix(in srgb, var(--ink) 62%, transparent);
+      --thumb-rule: var(--ink)
     }
+    .psec-thumb svg { width: 48px; height: 48px; display: block }
     .psec-copy h2 { margin: 0 0 10px }
     .psec-open {
       font: inherit; font-family: var(--serif);
@@ -258,18 +259,10 @@
     }
     .psec-open:hover, .psec-open:focus-visible { color: var(--accent-ink); outline: none }
     .psec-copy > p { font-size: 15.5px; color: var(--ink2); text-wrap: pretty; margin-bottom: 10px }
-    .psec-jump {
-      display: flex; flex-wrap: wrap; gap: 12px 24px; margin-top: var(--s3)
-    }
-    .psec-jump a {
-      font-size: var(--t-sm); color: var(--ink3); text-decoration: none;
-      min-height: 40px; display: inline-flex; align-items: center
-    }
-    .psec-jump a:hover, .psec-jump a:focus-visible { color: var(--ink) }
     @media (max-width: 560px) {
-      .psec { grid-template-columns: 64px 1fr; gap: var(--s2) }
-      .psec-thumb { width: 64px; height: 64px }
-      .psec-thumb svg { width: 56px; height: 56px }
+      .psec { grid-template-columns: 40px 1fr; gap: var(--s2) }
+      .psec-thumb { width: 40px; height: 40px }
+      .psec-thumb svg { width: 40px; height: 40px }
     }
 
     .catq {
@@ -564,30 +557,28 @@
       return "";
     }
 
-    function shapeThumbHTML(markup) {
-      const doc = new DOMParser().parseFromString(markup, "image/svg+xml");
-      const svg = doc.documentElement;
-      if (!svg || svg.localName !== "svg") return markup;
-      const fields = new Set(Object.values(FIELDS).map(h => h.toLowerCase()));
-      svg.querySelectorAll("[fill]").forEach(el => {
-        const f = (el.getAttribute("fill") || "").toLowerCase();
-        if (!f || f === "none") return;
+    function thumbHTML(key) {
+      const wrap = document.createElement("div");
+      wrap.innerHTML = motifHTML(key);
+      const svg = wrap.querySelector("svg");
+      if (!svg) return wrap.innerHTML;
+      const cream = { "#f2eee2": 1, "#f2f1ee": 1, "#d1a19c": 1 };
+      const rule = { "#0d0d0d": 1, "#000": 1, "#000000": 1, black: 1 };
+      svg.querySelectorAll("path").forEach(el => {
+        if (el.closest("mask, clipPath, defs")) return;
         const d = (el.getAttribute("d") || "").replace(/\s+/g, "");
-        const tag = el.localName;
-        const w = el.getAttribute("width");
-        const x = el.getAttribute("x");
-        const y = el.getAttribute("y");
-        const canvas = d.indexOf("M2240H0V224") >= 0
-          || (tag === "rect" && w === "224" && (!x || x === "0") && (!y || y === "0"));
-        if (canvas || fields.has(f)) { el.remove(); return; }
-        el.setAttribute("fill", "currentColor");
+        if (d.indexOf("M2240H0V224") >= 0) el.remove();
       });
-      svg.querySelectorAll("[stroke]").forEach(el => {
-        const s = el.getAttribute("stroke") || "";
-        if (!s || s === "none") return;
-        el.setAttribute("stroke", "currentColor");
+      svg.querySelectorAll("[fill], [stroke]").forEach(el => {
+        if (el.closest("clipPath, mask, defs")) return;
+        const f = (el.getAttribute("fill") || "").toLowerCase();
+        const s = (el.getAttribute("stroke") || "").toLowerCase();
+        if (cream[f]) el.setAttribute("fill", "var(--thumb-mark)");
+        if (rule[f]) el.setAttribute("fill", "var(--thumb-rule)");
+        if (cream[s]) el.setAttribute("stroke", "var(--thumb-mark)");
+        if (rule[s]) el.setAttribute("stroke", "var(--thumb-rule)");
       });
-      return new XMLSerializer().serializeToString(svg);
+      return wrap.innerHTML;
     }
 
     function catIds() { return Object.keys(db().cats); }
@@ -706,26 +697,17 @@
       return el;
     }
 
-    function patternSection(p, u, siblings) {
+    function patternSection(p, u) {
       const el = document.createElement("article");
       el.className = "psec";
       el.id = "sec-" + p.s;
       el.style.setProperty("--accent", db().cats[p.c].hex);
-      const i = siblings.findIndex(x => x.n === p.n);
-      const prev = siblings[i - 1];
-      const next = siblings[i + 1];
-      let jump = '<nav class="psec-jump" aria-label="' + u.onPage + '">';
-      if (prev) jump += '<a href="#sec-' + prev.s + '">' + u.prevPat + ': ' + prev.t + '</a>';
-      if (next) jump += '<a href="#sec-' + next.s + '">' + u.nextPat + ': ' + next.t + '</a>';
-      jump += '</nav>';
-      el.innerHTML = '<div class="psec-thumb" aria-hidden="true">' + shapeThumbHTML(motifHTML(p.n)) + '</div>' +
+      el.innerHTML = '<div class="psec-thumb" aria-hidden="true">' + thumbHTML(p.n) + '</div>' +
         '<div class="psec-copy">' +
         (p.f ? '<span class="feat">' + u.featured + '</span>' : "") +
-        '<p class="psec-num">' + p.n + '</p>' +
         '<h2><button type="button" class="psec-open">' + p.t + '</button></h2>' +
         '<p>' + p.d + '</p>' +
-        '<p>' + p.o + '</p>' +
-        jump + '</div>';
+        '<p>' + p.o + '</p></div>';
       el.querySelector(".psec-open").onclick = () => openP(p);
       return el;
     }
@@ -735,7 +717,7 @@
       nav.hidden = false;
       nav.setAttribute("aria-label", u.onPage);
       nav.innerHTML = "<ol>" +
-        list.map(p => '<li><a href="#sec-' + p.s + '" data-sec="sec-' + p.s + '">' + p.n + " " + p.t + "</a></li>").join("") +
+        list.map(p => '<li><a href="#sec-' + p.s + '" data-sec="sec-' + p.s + '">' + p.t + "</a></li>").join("") +
         "</ol>";
     }
 
@@ -820,7 +802,7 @@
           $("gridWrap").classList.add("has-rail");
           const list = pats.filter(p => p.c === filter);
           sectionNav(list, u);
-          list.forEach(p => grid.appendChild(patternSection(p, u, list)));
+          list.forEach(p => grid.appendChild(patternSection(p, u)));
           watchSections(list);
           renderRelatedAndNext(u, searching);
           return;
