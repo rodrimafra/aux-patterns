@@ -128,10 +128,10 @@ components:
     padding: "8px 14px"
     height: "38px"
   badge-featured:
-    backgroundColor: "{colors.gallery-stone}"
-    textColor: "{colors.night-paper}"
+    backgroundColor: "transparent"
+    textColor: "{colors.gallery-stone-deep}"
     rounded: "{rounded.pill}"
-    padding: "3px 9px"
+    padding: "4px 10px"
 ---
 
 # Design System: Agentic UX Patterns
@@ -158,7 +158,7 @@ Confirmed visual rejections: no Gemframe purple as identity, no client gemstone 
 Night Paper desk, Gallery Cream ink, Gallery Stone rest chrome. Category hues are a ten-color atlas, not a logo.
 
 ### Primary
-- **Gallery Stone** (`{colors.gallery-stone}`): rest-state `--accent` when no category is selected. Featured pills, quiet marks. Light theme mixes this 58% into `{colors.light-ink}` for `--accent-ink` so accent text holds contrast.
+- **Gallery Stone** (`{colors.gallery-stone}`): rest-state `--accent` when no category is selected. Light theme mixes this 58% into `{colors.light-ink}` for `--accent-ink` so accent marks hold contrast.
 
 ### Neutral
 - **Night Paper** (`{colors.night-paper}`): dark page ground (`--bg`).
@@ -192,16 +192,18 @@ Cats 7 and 10 may use violet/indigo on a mark. They must not become the site’s
 
 ### Hierarchy
 - **Display** (600, `clamp(2.441rem, 7vw, 4.5rem)`, 1.04, tracking `-0.015em`): site title on the landing hero.
-- **Title** (600, `clamp(var(--t-lg), 2.6vw, var(--t-xl))`, 1.18): pattern name on the hub, hash link, Gallery Cream / light ink. Hover and focus use scoped `--accent-ink`; in-view does not recolor the title.
+- **Title** (600, `clamp(var(--t-lg), 2.6vw, var(--t-xl))`, 1.18): pattern name on the hub, hash link, Gallery Cream / light ink at rest and hover. Focus uses a 2px `--ink3` outline, not a category tint.
 - **Headline** (600, `clamp(1.25rem, 2.6vw, 1.563rem)`, 1.2): card titles and hub pattern names.
 - **Subhead** (600 serif, `--t-lg`, `-0.01em`): Overview, Why it works, Examples in the hub folio.
 - **Lemma** (400 italic serif, `--t-base`, 1.45, tracking `0.01em`): one-sentence definition under the pattern title.
-- **Body** (400, `--t-base`, 1.65, tracking `0.01em`): Overview and section prose. Measure 38rem. Lists match body size. Catalog mark is a 5px square in `--accent-quiet` (Gallery Cream Muted / `--ink2`).
-- **Label** (600, `--t-xs`, tracking `0.16em`, uppercase): category kicker, featured badge, When to use/avoid, Related, Further reading. Folio kickers use `--accent-quiet` (greyscale `--ink2`), not the category hex.
+- **Body** (400, `--t-base`, 1.65, tracking `0.01em`): Overview and section prose. Measure 38rem. Lists match body size. Catalog mark is a 5px square in `--ink3`.
+- **Label** (600, `--t-xs`, tracking `0.16em`, uppercase): category kicker, featured badge, When to use/avoid, Related, Further reading. Folio kickers and the featured chip use `--ink3`.
 
 Scale ratio `--ratio: 1.25` (`--t-xs` … `--t-4xl`).
 
 **The Caption Voice Rule.** Uppercase tracking labels never compete with serif titles. If a control needs a name, keep it sans and quiet.
+
+**The Greyscale Type Rule.** Category identity on a hub is the teaching field (`--illu-field`): hero canvas and rail `.on` ticker. Running text, labels, and hover type use `--ink` / `--ink2` / `--ink3` only. Atlas hex (`cats[n].hex`) stays on home cards.
 
 ## Layout
 
@@ -258,16 +260,16 @@ Stroke icons: 18px (16px `.sm`), stroke 1.5, round caps, `currentColor`.
 - **Error / Disabled:** not in the prototype; do not invent
 
 ### Navigation
-Sticky filter strip under the topbar (`top: var(--topbar-h)`) on the home index only. Category hubs hide search. Hub topbar is full-bleed: transparent over the category field, then fades to `{colors.night-paper}` / `{colors.light-paper}` (`--bg`, same as `#gridWrap`) once the hero exits under the bar. Mark and Back sit in a start cluster (`--s2` gap) aligned to the rail inset; language and theme sit in an end cluster (`--s1` gap). Hub section rail: 13px links, sticky below the bar (`top: var(--topbar-h)`), 2px left rule in the category hue (`cats[n].hex`) when `.on` matches the in-view pattern. Under 800px the rail becomes a horizontal chip scroller, not hidden.
+Sticky filter strip under the topbar (`top: var(--topbar-h)`) on the home index only. Category hubs hide search. Hub topbar is full-bleed: transparent over the category field, then fades to `{colors.night-paper}` / `{colors.light-paper}` (`--bg`, same as `#gridWrap`) once the hero exits under the bar. Mark and Back sit in a start cluster (`--s2` gap) aligned to the rail inset; language and theme sit in an end cluster (`--s1` gap). Hub section rail: 13px links, sticky below the bar (`top: var(--topbar-h)`), 2px left rule in the category field (`--illu-field`, same as the hero canvas) when `.on` matches the in-view pattern. Under 800px the rail becomes a horizontal chip scroller, not hidden.
 
 ### Pattern detail (hub folio)
-In-page on the category hub. Every pattern in the aisle is fully visible: still, serif title (hash link), italic lemma, then one article column. Overview sits in that column with Why it works and Examples as serif subheads (`--t-lg`). When to use / avoid, Related, and Further reading are caption kickers in `--accent-quiet` (Gallery Cream Muted, greyscale). Chunks separate by space (`--s6` between essay sections, `--s7` into and out of the use/avoid pair and the folio close), not hairlines. List rows stack on `--s2` gap with a 5px square catalog mark in the same quiet hue. Related patterns and Further reading sit in `.psec-end` as the close of the folio. Title and rail scroll to the pattern; no expand/collapse, no More details / Close, no peek mask. Copy link remains a quiet 44px hit on the title row. Contact remains a native `<dialog>` (bottom sheet under 640px).
+In-page on the category hub. Every pattern in the aisle is fully visible: still, serif title (hash link), italic lemma, then one article column. Overview sits in that column with Why it works and Examples as serif subheads (`--t-lg`). When to use / avoid, Related, and Further reading are caption kickers in `--ink3`. Chunks separate by space (`--s6` between essay sections, `--s7` into and out of the use/avoid pair and the folio close), not hairlines. List rows stack on `--s2` gap with a 5px square catalog mark in `--ink3`. Related patterns and Further reading sit in `.psec-end` as the close of the folio. Title and rail scroll to the pattern; no expand/collapse, no More details / Close, no peek mask. Copy link remains a quiet 44px hit on the title row. Contact remains a native `<dialog>` (bottom sheet under 640px).
 
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** set `--accent` from `cats[n].hex` on the active card, hub, or expanded pattern only.
+- **Do** set `--illu-field` from `FIELDS` on the hub (hero and `#gridWrap`) so the rail ticker matches the hero canvas. Set `--accent` from `cats[n].hex` on home cards, not on type.
 - **Do** keep display type on the Iowan / Palatino / Georgia stack; never web-font the prototype without an explicit stack change.
 - **Do** put featured badges in the caption body, not on the teaching still.
 - **Do** respect `prefers-reduced-motion` by dropping transition and animation.
@@ -278,4 +280,5 @@ In-page on the category hub. Every pattern in the aisle is fully visible: still,
 - **Don't** clone Laws of UX layout, icons, or type as a visual twin.
 - **Don't** add Takeaways chrome to patterns other than 3.2, 5.1, and 6.3.
 - **Don't** document or ship em dashes in UI copy.
+- **Don't** paint running text, kickers, or hover type in `cats[n].hex`. Hub chrome uses the teaching field, not the atlas hex.
 - **Don't** invent a second spacing scale or a fake shadow ramp before the Ambient Lift tokens exist.

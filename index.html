@@ -260,7 +260,7 @@
       text-decoration: underline; text-underline-offset: 3px;
       min-height: 44px
     }
-    .search-all:hover, .search-all:focus-visible { color: var(--accent-ink) }
+    .search-all:hover, .search-all:focus-visible { color: var(--ink2) }
 
     main { padding: var(--s3) 0 var(--s8) }
     .grid-wrap { container-type: inline-size; background: var(--bg) }
@@ -302,7 +302,7 @@
     }
     .sec-nav a:hover, .sec-nav a:focus-visible { color: var(--ink); background: var(--bg2) }
     .sec-nav a.on {
-      color: var(--ink); border-left-color: var(--accent);
+      color: var(--ink); border-left-color: var(--illu-field);
       background: color-mix(in srgb, var(--bg2) 80%, transparent)
     }
     @media (max-width: 800px) {
@@ -334,21 +334,17 @@
       }
       .sec-nav a.on {
         border-left-color: transparent;
-        border-bottom-color: var(--accent);
+        border-bottom-color: var(--illu-field);
         background: transparent
       }
     }
     .psec {
-      --accent-ink: var(--accent);
-      --accent-quiet: var(--ink2);
+      --accent-quiet: var(--ink3);
       display: grid;
       grid-template-columns: 48px 1fr;
       gap: var(--s3);
       padding: var(--s5) 0 var(--s7);
       scroll-margin-top: var(--topbar-h)
-    }
-    [data-theme="light"] .psec {
-      --accent-ink: color-mix(in srgb, var(--accent) 44%, #17181c)
     }
     .psec + .psec { border-top: 1px solid var(--line) }
     .psec-copy { min-width: 0; position: relative }
@@ -399,8 +395,10 @@
       text-decoration: none;
       color: var(--ink)
     }
-    .psec-title:hover,
-    .psec-title:focus-visible { color: var(--accent-ink) }
+    .psec-title:focus-visible {
+      outline: 2px solid var(--ink3);
+      outline-offset: 4px
+    }
     .psec-def {
       grid-column: 1;
       grid-row: 2;
@@ -493,10 +491,10 @@
       align-self: flex-start;
       display: inline-block;
       margin-bottom: 10px;
-      font-size: var(--t-xs); letter-spacing: .14em; color: var(--bg);
-      background: var(--accent); border-radius: 999px; padding: 4px 10px; font-weight: 700
+      font-size: var(--t-xs); letter-spacing: .14em; color: var(--ink3);
+      background: transparent; border: 1px solid var(--line);
+      border-radius: 999px; padding: 4px 10px; font-weight: 700
     }
-    [data-theme="light"] .card .feat, [data-theme="light"] .psec .feat { color: var(--ink) }
 
     dialog {
       border: none; padding: 0; background: transparent;
@@ -614,7 +612,7 @@
       padding: 8px 14px; font-size: 13.5px; color: var(--ink2); cursor: pointer; min-height: 44px
     }
     .rel button:hover, .rel button:focus-visible {
-      color: var(--ink); border-color: var(--accent)
+      color: var(--ink); border-color: var(--ink3)
     }
 
     .take {
@@ -698,7 +696,7 @@
       font-family: var(--serif); font-size: clamp(var(--t-xl), 4vw, var(--t-3xl));
       font-weight: 600; line-height: 1.15
     }
-    .next-cat:hover strong, .next-cat:focus-visible strong { color: var(--accent-ink) }
+    .next-cat:hover strong, .next-cat:focus-visible strong { color: var(--ink2) }
     .next-cat:focus-visible { outline: 2px solid var(--ink3); outline-offset: 4px }
 
     @media (max-width:640px) {
@@ -968,6 +966,14 @@
       history.replaceState(null, "", path);
     }
 
+    function scrollPageTop() {
+      const html = document.documentElement;
+      const prev = html.style.scrollBehavior;
+      html.style.scrollBehavior = "auto";
+      window.scrollTo(0, 0);
+      html.style.scrollBehavior = prev;
+    }
+
     function goHome(clearSearch) {
       filter = "all";
       openSlug = null;
@@ -982,7 +988,7 @@
       query = "";
       const inp = $("q"); if (inp) inp.value = "";
       setHash("#cat-" + filter);
-      renderGrid();
+      renderGrid({ scrollTop: true });
     }
 
     function renderHero() {
@@ -999,6 +1005,7 @@
         hero.style.setProperty("--illu-field", FIELDS[filter]);
         hero.style.setProperty("--accent", cat.hex);
         $("gridWrap").style.setProperty("--accent", cat.hex);
+        $("gridWrap").style.setProperty("--illu-field", FIELDS[filter]);
         $("tTitle").textContent = cat.name;
         $("tSub").textContent = cat.q;
         $("tBlurb").hidden = false;
@@ -1011,6 +1018,7 @@
         hero.style.removeProperty("--illu-field");
         hero.style.removeProperty("--accent");
         $("gridWrap").style.removeProperty("--accent");
+        $("gridWrap").style.removeProperty("--illu-field");
         $("tTitle").textContent = "Agentic UX Patterns";
         $("tSub").textContent = u.sub;
         $("tBlurb").hidden = true;
@@ -1238,7 +1246,9 @@
     }
 
     function renderGrid(opts) {
+      const toTop = !!(opts && opts.scrollTop);
       const doRender = () => {
+        if (toTop) scrollPageTop();
         const u = ui(), cats = db().cats;
         const searching = !!query.trim();
         renderHero();
@@ -1281,8 +1291,13 @@
         renderRelatedAndNext(u, searching);
       };
       const skipVt = (opts && opts.skipVt) || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (!skipVt && document.startViewTransition) document.startViewTransition(doRender);
-      else doRender();
+      if (!skipVt && document.startViewTransition) {
+        const vt = document.startViewTransition(doRender);
+        if (toTop) vt.finished.then(scrollPageTop).catch(function () { scrollPageTop(); });
+      } else {
+        doRender();
+        if (toTop) scrollPageTop();
+      }
     }
 
     $("q").addEventListener("input", e => { query = e.target.value.toLowerCase(); renderGrid({ skipVt: true }); });
@@ -1366,7 +1381,7 @@
         openSlug = null;
         query = "";
         const inp = $("q"); if (inp) inp.value = "";
-        renderGrid();
+        renderGrid({ scrollTop: true });
         return;
       }
       const p = db().patterns.find(x => x.s === slug);

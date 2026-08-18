@@ -34,7 +34,8 @@ Standing project constraints:
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
-| 2026-08-18 | Folio kickers try greyscale | Owner: `--accent-quiet` is `{colors.gallery-cream-muted}` / `--ink2`. Steel and shaded amber dropped. Rail and title hover keep the category hue. |
+| 2026-08-18 | Rail ticker matches the category hero field | Owner: `.sec-nav a.on` uses `--illu-field` (`FIELDS`), the same canvas as the hub hero, not `cats[n].hex`. |
+| 2026-08-18 | Category hue is chrome; type is greyscale | Owner: rail `.on` keeps `cats[n].hex`. Titles, kickers, featured, Related hover, and Next category use `--ink` / `--ink2` / `--ink3` only. |
 | 2026-08-18 | Folio chunks divide by space, not hairlines | Owner: drop list and end-beat rules. Why to use/avoid and use/avoid to Examples use `--s7`. List rows stack on `--s2`. |
 | 2026-08-18 | Hub pattern title stays cream at rest | Owner: in-view no longer paints the serif title in category hue. Hover/focus still lift. Kickers and catalog squares keep the hue. |
 | 2026-08-18 | Hub patterns are a full folio, not an accordion | Owner: drop More details / Close / peek. Rail and title scroll. Category hue on title, kickers, catalog squares. Serif subheads for Overview / Why / Examples. Related + Further reading close the folio. |
