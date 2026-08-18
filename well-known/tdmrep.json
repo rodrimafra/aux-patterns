@@ -1,7 +1,0 @@
-[
-  {
-    "location": "/",
-    "tdm-reservation": 1,
-    "tdm-policy": "https://aux-patterns.vercel.app/ai-policy.json"
-  }
-]

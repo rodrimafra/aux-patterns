@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224 224" fill="none" aria-hidden="true">
-  <rect width="224" height="224" fill="#326E36"/>
-  <circle cx="112" cy="112" r="64" stroke="#F2EEE2" stroke-width="3"/>
-  <!-- Control crossbar through A -->
-  <line x1="88" y1="120" x2="136" y2="120" stroke="#F2EEE2" stroke-width="3" stroke-linecap="square"/>
-  <polygon points="112,64 152,136 72,136" fill="none" stroke="#F2EEE2" stroke-width="3" stroke-linejoin="miter"/>
-</svg>
