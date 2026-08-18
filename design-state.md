@@ -6,7 +6,7 @@
 
 **Active brief:** category hub IA (home as source of truth).
 
-Problem: 49-card wall. Home should teach the ten jobs; a category page lists that category's patterns. Primary persona: designers/PMs scanning for a job, then a pattern. Success: home is 10 category cards; hub is hero + question + pattern cards + related/next; pattern dialog stays.
+Problem: 49-card wall. Home should teach the ten jobs; a category page lists that category's patterns. Primary persona: designers/PMs scanning for a job, then a pattern. Success: home is 10 category cards; hub is hero + question + full in-page pattern folio + related/next; Contact dialog stays.
 
 Source brief: `docs/designpowers/briefs/2026-08-14-category-hub-pages.md`
 
@@ -34,6 +34,19 @@ Standing project constraints:
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
+| 2026-08-18 | Folio kickers try greyscale | Owner: `--accent-quiet` is `{colors.gallery-cream-muted}` / `--ink2`. Steel and shaded amber dropped. Rail and title hover keep the category hue. |
+| 2026-08-18 | Folio chunks divide by space, not hairlines | Owner: drop list and end-beat rules. Why to use/avoid and use/avoid to Examples use `--s7`. List rows stack on `--s2`. |
+| 2026-08-18 | Hub pattern title stays cream at rest | Owner: in-view no longer paints the serif title in category hue. Hover/focus still lift. Kickers and catalog squares keep the hue. |
+| 2026-08-18 | Hub patterns are a full folio, not an accordion | Owner: drop More details / Close / peek. Rail and title scroll. Category hue on title, kickers, catalog squares. Serif subheads for Overview / Why / Examples. Related + Further reading close the folio. |
+| 2026-08-17 | Hub topbar fades to reading-paper after the hero | Owner: full-bleed bar, `--bg` to match `#gridWrap`. Mark + Back as a start cluster; rail sticks below the bar. |
+| 2026-08-17 | Hub article uses masthead then a 38rem reading column | Owner: italic serif lemma under the title; Overview and body share `--s5` section cadence; labels `--t-xs` tight to copy. |
+| 2026-08-17 | Collapsed pattern shows Overview plus a faded peek; More details sits below | Owner: teaser peeks the rest of the body; pill label More details / Close. |
+| 2026-08-17 | Search removed from category hubs | Owner: search is a home-index tool. Hubs list the aisle in full. |
+| 2026-08-17 | Copy link recedes as a caption mark | Owner: 44px hit kept; drop the raised fill, hairline, and blur. 16px stroke in Gallery Stone Deep so the title leads. |
+| 2026-08-17 | Copy link is an icon on the pattern title row | Owner: right of the title, 44px icon-only, not a labeled pill under the definition. |
+| 2026-08-17 | Download markdown removed from hub accordion | Owner: expanded pattern tools keep Copy link only. |
+| 2026-08-17 | Hub accordion has a labeled Read pattern trigger | Teaser looked like a static card (still + heading). Pill + chevron on every `.psec`; whole teaser opens; label becomes Close when open. |
+| 2026-08-17 | Hub search stays on; museum wall kept | Critique pass: search on every aisle with token match, result count, all-categories escape. Hub copy on darkened plate for AA. Rail `.on` follows open pattern; chips hidden under 800px. Chrome 44px, labeled share/download, Featured 12px. Home stills unchanged. |
 | 2026-08-17 | Alt master-symbol direction scout completed (inspiration only; P1 remains locked) | Moodboard proposes two competing directions vs keyhole seal: **Open Caliper** (open jaws hold) and **Punched Plate** (mass + counterform stamp). Artifact: `docs/designpowers/inspiration/2026-08-17-master-symbol-alt-directions.md`. No redraw; next is human Figma probes A1-A3 / B1-B3. |
 | 2026-08-17 | Master-symbol alphabet: circle/round = human, sharp square = agent | Owner: judgement practices for designing AI agents. Chase coin lesson kept as counterform/mass, not octagon clone. HTML probes before Figma: `docs/designpowers/probes/2026-08-17-master-symbol-circle-square.html` (M1 Coin, M2 Caliper, M3 Soft plate). |
 | 2026-08-17 | Alphabet rule added: lines = controlling the agent | Logo-generator skill Phase 2: 6 variants (V1–V6) with human/agent/control grammar. Probe: `docs/designpowers/probes/2026-08-17-master-symbol-logo-generator.html`. SVGs: `assets/illustrations/mark/logo-generator/`. |
@@ -44,6 +57,7 @@ Standing project constraints:
 | 2026-08-17 | Master mark on home hero + favicon | Inline plate-168 beside home `h1` (`currentColor`: cream dark / ink light). Hidden on category hubs. `favicon.svg` at repo root with `prefers-color-scheme`. |
 | 2026-08-17 | Master mark moved to top nav | 40px home control, left of topbar. Cream on dark / ink on light; cream on category hubs. Click returns home. Favicon unchanged. |
 | 2026-08-17 | Default color mode is dark | First visit and any non-`light` stored value load dark. Light only after explicit toggle. `color-scheme` meta follows the active theme. |
+| 2026-08-17 | Pattern detail is an in-page accordion on the category hub | One expanded at a time. Teaser is still + title + definition. Full sections (Overview through Further reading) sit in `.psec-body`. Hash `#slug` expands; collapse restores `#cat-n`. Search cards and related chips expand in place (other category goes to that hub). Pattern `<dialog>` retired. Contact dialog stays. Supersedes 2026-08-14 keep-dialog lock. |
 | 2026-08-17 | Master symbol P1 locked in Figma as component `aux-master-symbol` (`85:109`) | Probe `probe/master-symbol-P1` (`86:109`) uses instances at 16/32/64/224 plus white/cream/night grounds. Edit the component; do not detach. Sketch 152 renamed `aux-master-symbol/figma-152` (`82:109`). Page: 🧱 Components. Superseded by FINAL Letter-A seal on the same component set. |
 | 2026-08-17 | Path presentations include visual probes before a pick | Owner: review by looking, then select. Text-only forks are incomplete. Probe page for master-symbol A/B/C: `docs/designpowers/probes/2026-08-17-master-symbol-paths.html` |
 | 2026-08-14 | Home = 10 category cards; category page = hub (hero + question + pattern cards + related/next); keep pattern dialog | Owner lock: Figma home is visual source of truth; LoUX detail frame donates structure only |
@@ -187,6 +201,7 @@ Resolved this pass: analogy domains; `--illu-*` twins; viewBox 320×200 (probe, 
 - Phase A verification: `docs/designpowers/verification/2026-08-13-illustration-phase-a.md`
 - GitHub: https://github.com/rodrimafra/aux-patterns
 - **Resume checkpoint (2026-08-13 stop, superseded 2026-08-14 Phase B):** `docs/designpowers/handoff/2026-08-13-illustration-checkpoint.md`
+- Pattern detail folio (2026-08-18): full in-page `.psec` on category hubs in `index.html`; Contact remains `#contactDlg`
 - **FINAL master mark (2026-08-17):** Figma `aux-master-symbol` [`89:559`](https://www.figma.com/design/g81CTKZNVjYAqhjdVEPji4/Untitled?node-id=89-559); repo `assets/illustrations/mark/aux-master-symbol.svg`, `aux-master-symbol-plate-168.svg` (`currentColor`), `aux-master-symbol-mode-dark.svg`, `aux-master-symbol-mode-light.svg`
 - Category art alphabet strategy + probes (2026-08-17): `docs/designpowers/strategy/2026-08-17-category-art-brand-alphabet.md`, probe `docs/designpowers/probes/2026-08-17-category-art-alphabet.html`, SVGs `assets/illustrations/categories/probes-alphabet/`
 - Master symbol T3 Letter Bar in Figma (2026-08-17): component set `aux-master-symbol-t3` `94:207`; probe `probe/master-symbol-T3` `94:208` (exploration; final lives on `89:559`)

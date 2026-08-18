@@ -66,7 +66,7 @@ typography:
     fontWeight: 400
   feat:
     fontFamily: "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif"
-    fontSize: "10.5px"
+    fontSize: "12px"
     fontWeight: 700
   definition:
     fontFamily: "Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif"
@@ -98,18 +98,18 @@ components:
     textColor: "{colors.gallery-cream-muted}"
     rounded: "{rounded.pill}"
     padding: "8px 14px"
-    height: "40px"
+    height: "44px"
   button-chrome-on:
     backgroundColor: "{colors.gallery-cream}"
     textColor: "{colors.night-paper}"
     rounded: "{rounded.pill}"
     padding: "8px 14px"
-    height: "40px"
+    height: "44px"
   button-icon:
     backgroundColor: "{colors.night-raised}"
     textColor: "{colors.gallery-cream-muted}"
     rounded: "{rounded.full}"
-    size: "42px"
+    size: "44px"
   input-search:
     backgroundColor: "{colors.night-raised}"
     textColor: "{colors.gallery-cream}"
@@ -149,7 +149,7 @@ Confirmed visual rejections: no Gemframe purple as identity, no client gemstone 
 **Key Characteristics:**
 - Dark editorial first; light theme is the same desk with the lamp on.
 - Serif display (Iowan / Palatino / Georgia) for titles; system sans for chrome and body.
-- Teaching stills (224 squares on cards, 16:9 motif in detail) carry color and meaning.
+- Teaching stills (224 squares on cards, 48px thumbs on hub sections) carry color and meaning.
 - Hairline 1px borders in the shipped prototype; ambient shadows are the locked direction for future surfaces.
 - Bilingual EN-US / PT-BR and `prefers-reduced-motion` are part of the visual contract, not extras.
 
@@ -162,14 +162,14 @@ Night Paper desk, Gallery Cream ink, Gallery Stone rest chrome. Category hues ar
 
 ### Neutral
 - **Night Paper** (`{colors.night-paper}`): dark page ground (`--bg`).
-- **Night Raised** (`{colors.night-raised}`): topbar buttons, search field, detail sheet (`--bg2`).
+- **Night Raised** (`{colors.night-raised}`): topbar buttons, search field, contact sheet (`--bg2`).
 - **Night Card** (`{colors.night-card}`): pattern cards and takeaway wells (`--card`).
 - **Night Line** (`{colors.night-line}`): 1px hairlines (`--line`).
 - **Gallery Cream** (`{colors.gallery-cream}`): dark primary ink (`--ink`).
 - **Gallery Cream Muted** (`{colors.gallery-cream-muted}`): secondary reading (`--ink2`).
 - **Gallery Stone Deep** (`{colors.gallery-stone-deep}`): tertiary captions (`--ink3`).
 - **Light Paper / Raised / Card / Line / Ink** (`{colors.light-paper}` … `{colors.light-ink-faint}`): lamp-on theme. Same roles, inverted values.
-- **Cat Field Cream** (`{colors.cat-field-cream}`): ink on category-tinted hero when a hub is active (`#f2eee2`), not Gallery Cream.
+- **Cat Field Cream** (`{colors.cat-field-cream}`): ink on category-tinted hero when a hub is active (`#f2eee2`), not Gallery Cream. Hub title, question, and blurb sit on a darkened plate (`color-mix` 65% field / 35% `#0d0d0d`) so body copy holds 4.5:1 on every field, including Learning terracotta.
 
 ### Tertiary
 Category atlas (data `cats[n].hex`, also `--accent` on a scoped surface):
@@ -192,10 +192,12 @@ Cats 7 and 10 may use violet/indigo on a mark. They must not become the site’s
 
 ### Hierarchy
 - **Display** (600, `clamp(2.441rem, 7vw, 4.5rem)`, 1.04, tracking `-0.015em`): site title on the landing hero.
-- **Title** (600, `clamp(1.953rem, 5.5vw, 3.052rem)`, 1.12): pattern name in the detail sheet.
+- **Title** (600, `clamp(var(--t-lg), 2.6vw, var(--t-xl))`, 1.18): pattern name on the hub, hash link, Gallery Cream / light ink. Hover and focus use scoped `--accent-ink`; in-view does not recolor the title.
 - **Headline** (600, `clamp(1.25rem, 2.6vw, 1.563rem)`, 1.2): card titles and hub pattern names.
-- **Body** (400, `1rem` / `15.5px`–`16px` in sheets, 1.55): definitions and section copy. Sub and lead stay under ~36–40rem.
-- **Label** (600–700, ~10.5–12.5px, tracking `0.12em`–`0.18em`, uppercase): category kicker, featured badge, section headers in the sheet (`h3`).
+- **Subhead** (600 serif, `--t-lg`, `-0.01em`): Overview, Why it works, Examples in the hub folio.
+- **Lemma** (400 italic serif, `--t-base`, 1.45, tracking `0.01em`): one-sentence definition under the pattern title.
+- **Body** (400, `--t-base`, 1.65, tracking `0.01em`): Overview and section prose. Measure 38rem. Lists match body size. Catalog mark is a 5px square in `--accent-quiet` (Gallery Cream Muted / `--ink2`).
+- **Label** (600, `--t-xs`, tracking `0.16em`, uppercase): category kicker, featured badge, When to use/avoid, Related, Further reading. Folio kickers use `--accent-quiet` (greyscale `--ink2`), not the category hex.
 
 Scale ratio `--ratio: 1.25` (`--t-xs` … `--t-4xl`).
 
@@ -205,21 +207,21 @@ Scale ratio `--ratio: 1.25` (`--t-xs` … `--t-4xl`).
 
 Container `--wrap` max 1200px, inline pad `--sp` (`clamp(16px, 4vw, 32px)`). Index grid: `auto-fill`, min `min(320px, 100%)`, gap `--s2`. Category hub reading column max 48rem with a sticky section rail (`minmax(168px, 220px)` + column + leftover); rail stacks under 800px.
 
-Breakpoints in the shipped CSS: 720px (category hero), 800px (rail), 640px (detail becomes bottom sheet), 560px (hub thumb), container 480px (category question cue).
+Breakpoints in the shipped CSS: 720px (category hero), 800px (rail), 640px (contact becomes bottom sheet), 560px (hub thumb), container 480px (category question cue).
 
-Touch: chrome controls 40px+; search 44px; icon buttons 42px. Safe-area insets on topbar and footer.
+Touch: chrome controls 44px; search 44px; icon buttons 44px. Safe-area insets on topbar and footer. Sticky topbar keeps Back in reach.
 
 **The Eight-Point Rule.** Spacing comes from `--s0`–`--s8` (4px … 80px). One-off padding (22px, 14px) is allowed on type measure, not as a second scale.
 
 ## Elevation & Depth
 
-Shipped prototype is tonal and hairline: `--bg` / `--bg2` / `--card` / `--line`. Cards lift `translateY(-3px)` on hover. Detail overlay: backdrop `rgba(10, 10, 13, .66)` plus `blur(6px)`. No card `box-shadow` in current CSS.
+Shipped prototype is tonal and hairline: `--bg` / `--bg2` / `--card` / `--line`. Cards lift `translateY(-3px)` on hover. Contact overlay: backdrop `rgba(10, 10, 13, .66)` plus `blur(6px)`. No card `box-shadow` in current CSS.
 
 **The Ambient Lift Rule.** Ambient shadows are a first-class language going forward. Do not keep inventing more hairlines as a substitute. Exact shadow tokens are unresolved until a polish pass writes them; until then, do not fake a Material elevation ramp.
 
 ## Shapes
 
-Soft museum objects, not sharp tools. Cards 16px. Search 12px. Detail sheet 22px (24px 24px 0 0 as a bottom sheet under 640px). Pills 999px for chrome buttons, featured badge, related links. Icon buttons full circle. Teaching plates are square or 16:9 crops of the still, not rounded picture frames on the motif itself.
+Soft museum objects, not sharp tools. Cards 16px. Search 12px. Contact sheet 22px (24px 24px 0 0 as a bottom sheet under 640px). Pills 999px for chrome buttons, featured badge, related links. Icon buttons full circle. Teaching plates are square stills, not rounded picture frames on the motif itself.
 
 Hairline 1px `{colors.night-line}` / `{colors.light-line}`. Focus-visible: no glow ring on most chrome; shift to stronger ink and line. Next-category link uses a 2px outline offset 4px.
 
@@ -231,15 +233,15 @@ Chrome is caption. The still and the serif title are the exhibit.
 
 ### Buttons
 - **Shape:** pill (`999px`) for text chrome; circle (`50%`) for icon-only.
-- **Primary chrome (`.tbtn`):** raised fill, hairline, `--ink2` label, min-height 40px, pad `--s1` / 14px. On: invert to ink on paper.
+- **Primary chrome (`.tbtn`):** raised fill, hairline, `--ink2` label, min-height 44px, pad `--s1` / 14px. On: invert to ink on paper.
 - **Hover / Focus:** ink up, line to `--ink3`. No outline.
-- **Icon (`.icon-btn`):** 42px, 88% raised mix, 6px blur, hairline.
+- **Icon (`.icon-btn`):** 44px, 88% raised mix, 6px blur, hairline. Close on the contact dialog.
 
 Stroke icons: 18px (16px `.sm`), stroke 1.5, round caps, `currentColor`.
 
 ### Chips
 - **Related (`.rel button`):** ghost pill, hairline, transparent fill, 13.5px, min-height 38px.
-- **Featured:** Gallery Stone fill, 10.5px, tracking `0.14em`, 999px. Light theme: `{colors.light-ink}` on the pill, never cream on cream. Lives in `.body`, never on the teaching band.
+- **Featured:** Gallery Stone fill, 12px (`--t-xs`), tracking `0.14em`, 999px. Light theme: `{colors.light-ink}` on the pill, never cream on cream. Lives in `.body`, never on the teaching band.
 
 ### Cards / Containers
 - **Corner Style:** 16px
@@ -256,15 +258,16 @@ Stroke icons: 18px (16px `.sm`), stroke 1.5, round caps, `currentColor`.
 - **Error / Disabled:** not in the prototype; do not invent
 
 ### Navigation
-Sticky filter strip: gradient fade of page ground. Hub section rail: 13px links, 2px left rule when `.on`. Mobile: wrap pills, 8px radius, raised fill.
+Sticky filter strip under the topbar (`top: var(--topbar-h)`) on the home index only. Category hubs hide search. Hub topbar is full-bleed: transparent over the category field, then fades to `{colors.night-paper}` / `{colors.light-paper}` (`--bg`, same as `#gridWrap`) once the hero exits under the bar. Mark and Back sit in a start cluster (`--s2` gap) aligned to the rail inset; language and theme sit in an end cluster (`--s1` gap). Hub section rail: 13px links, sticky below the bar (`top: var(--topbar-h)`), 2px left rule in the category hue (`cats[n].hex`) when `.on` matches the in-view pattern. Under 800px the rail becomes a horizontal chip scroller, not hidden.
 
-### Pattern detail sheet
-Native `<dialog>`. Sheet max 760px, 22px radius, raised ground. Motif 16:9, max-height 280px. Body type 16px; list rows hairline-separated with a Gallery Stone comma mark. Under 640px: bottom sheet, min-height 60dvh. `@starting-style` enter 24px; killed under `prefers-reduced-motion`.
+### Pattern detail (hub folio)
+In-page on the category hub. Every pattern in the aisle is fully visible: still, serif title (hash link), italic lemma, then one article column. Overview sits in that column with Why it works and Examples as serif subheads (`--t-lg`). When to use / avoid, Related, and Further reading are caption kickers in `--accent-quiet` (Gallery Cream Muted, greyscale). Chunks separate by space (`--s6` between essay sections, `--s7` into and out of the use/avoid pair and the folio close), not hairlines. List rows stack on `--s2` gap with a 5px square catalog mark in the same quiet hue. Related patterns and Further reading sit in `.psec-end` as the close of the folio. Title and rail scroll to the pattern; no expand/collapse, no More details / Close, no peek mask. Copy link remains a quiet 44px hit on the title row. Contact remains a native `<dialog>` (bottom sheet under 640px).
+
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** set `--accent` from `cats[n].hex` on the active card, hub, or sheet only.
+- **Do** set `--accent` from `cats[n].hex` on the active card, hub, or expanded pattern only.
 - **Do** keep display type on the Iowan / Palatino / Georgia stack; never web-font the prototype without an explicit stack change.
 - **Do** put featured badges in the caption body, not on the teaching still.
 - **Do** respect `prefers-reduced-motion` by dropping transition and animation.

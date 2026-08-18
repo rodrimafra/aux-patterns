@@ -13,7 +13,7 @@
     "take": "Takeaways",
     "rel": "Related patterns",
     "read": "Further reading",
-    "empty": "No patterns match. Try another term.",
+    "empty": "No patterns match \"{q}\". Try a title, a job, or a product name like Claude Code.",
     "close": "Close",
     "theme": "Toggle theme",
     "f1": "Agentic UX Patterns © Rodrigo Mafra",
@@ -38,7 +38,15 @@
     "contactMessage": "Message",
     "contactSend": "Send",
     "contactSent": "Opening your email app to send this to Rodrigo.",
-    "contactNeed": "Please fill in name, email, subject, and message."
+    "contactNeed": "Please fill in name, email, subject, and message.",
+    "hits": "{n} patterns",
+    "hitsOne": "1 pattern",
+    "hitsIn": "{n} in {cat}",
+    "hitsInOne": "1 in {cat}",
+    "emptyIn": "Nothing in {cat} matches \"{q}\".",
+    "searchAll": "Search all categories",
+    "searchNav": "Search",
+    "searchPhHub": "Search this category…"
   },
   "pt": {
     "lang": "pt-BR",
@@ -54,7 +62,7 @@
     "take": "Para levar",
     "rel": "Padrões relacionados",
     "read": "Para ler depois",
-    "empty": "Nenhum padrão combina com essa busca. Tente outro termo.",
+    "empty": "Nenhum padrão combina com \"{q}\". Tente um título, um trabalho, ou um produto como Claude Code.",
     "close": "Fechar",
     "theme": "Alternar tema",
     "f1": "Agentic UX Patterns © Rodrigo Mafra",
@@ -79,6 +87,14 @@
     "contactMessage": "Mensagem",
     "contactSend": "Enviar",
     "contactSent": "Abrindo seu aplicativo de e-mail para enviar ao Rodrigo.",
-    "contactNeed": "Preencha nome, e-mail, assunto e mensagem."
+    "contactNeed": "Preencha nome, e-mail, assunto e mensagem.",
+    "hits": "{n} padrões",
+    "hitsOne": "1 padrão",
+    "hitsIn": "{n} em {cat}",
+    "hitsInOne": "1 em {cat}",
+    "emptyIn": "Nada em {cat} combina com \"{q}\".",
+    "searchAll": "Buscar em todas as categorias",
+    "searchNav": "Busca",
+    "searchPhHub": "Buscar nesta categoria…"
   }
 }

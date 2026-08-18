@@ -26,7 +26,7 @@ Owner: Rodrigo Mafra. Independent work, not a client deliverable.
 
 ## Operating Context
 
-Current surface is a self-contained bilingual prototype: open `index.html` in a browser, no server or build required. Users filter by category, search, open a pattern in a detail dialog (bottom sheet under 640px), toggle EN-US / PT-BR and dark / light (both persisted). Deep-link via hash, share, download markdown built from existing fields.
+Current surface is a self-contained bilingual prototype: open `index.html` in a browser, no server or build required. Users filter by category, search, then read full patterns on the category hub (rail or title scrolls to a named pattern). Contact stays a dialog. Toggle EN-US / PT-BR and dark / light (both persisted). Deep-link via hash, share a copy-link.
 
 Content lives in three copies until a later refactor: `index.html` embedded DB, `data/*.json`, and `patterns/` markdown (EN-US plus `patterns/pt-br/`).
 

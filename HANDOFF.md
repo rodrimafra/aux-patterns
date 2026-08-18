@@ -15,7 +15,7 @@ Read this whole file before touching anything. It tells you what this project is
 
 49 named patterns across 10 categories, each with a definition, rationale, usage guidance, and real public-product examples (Claude, ChatGPT, Copilot, Devin, Perplexity, Grammarly, Stripe, etc.).
 
-**Structure modeled on Laws of UX:** a filterable card index + individual detail pages, one law/pattern per page, downloadable/citable, CC-licensed.
+**Structure modeled on Laws of UX:** a filterable card index plus category hubs where each pattern expands in place, downloadable/citable, CC-licensed.
 
 **The owner's end goal:** turn this into his personal, career-defining public asset (a real deployed site, likely with a companion poster series), not a one-off deliverable.
 
@@ -70,11 +70,11 @@ agentic-ux-patterns/
 **`index.html`** is a single self-contained file (~145KB), no build step, no external dependencies except system fonts. It embeds all content as a JS object (`const DB = {...}`) so the markdown files and the HTML are currently **two independent copies of the same content**, not generated from one source. If you edit content, you must edit both, or better, refactor to a single source of truth (see §7).
 
 Confirmed working:
-- 49 patterns × 10 categories, both languages, card index + full detail view for every pattern (not just featured ones)
+- 49 patterns × 10 categories, both languages, card index plus in-page full detail for every pattern on its category hub (not just featured ones)
 - 3 featured patterns with a "featured" badge and extra "Takeaways" section: **3.2 Human-in-the-loop gates, 5.1 Reasoning glimpse, 6.3 Semantic highlighting of uncertainty**
 - EN-US default, PT-BR via persistent toggle (localStorage), correctly sets `<html lang>`
 - Dark/light theme toggle, persisted
-- Responsive: fluid type (`clamp()`), container queries, native `<dialog>` for detail view (becomes a mobile bottom sheet under 640px), View Transitions API on filter changes, `prefers-reduced-motion` respected, 40px+ touch targets, safe-area insets, `dvh` units
+- Responsive: fluid type (`clamp()`), container queries, native `<dialog>` for Contact only (becomes a mobile bottom sheet under 640px); pattern detail is a full in-page folio on the hub (no accordion); View Transitions API on filter changes, `prefers-reduced-motion` respected, 44px touch targets, safe-area insets, `dvh` units
 - Live search + category filter chips (horizontally scrollable with snap on mobile)
 - Zero em dashes anywhere in the copy (owner's explicit style rule, see §6)
 - Validated: HTML tag balance checked, embedded JSON parses cleanly, both language pattern counts confirmed at 49
