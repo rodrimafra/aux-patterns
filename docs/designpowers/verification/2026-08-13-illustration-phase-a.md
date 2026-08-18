@@ -66,7 +66,7 @@ Gate: No Phase B (49 pattern drills) until this checklist holds.
 ## Independence audit
 
 - No client product names, no Gemframe-as-brand field, violet/indigo only on accent props (cats 7/10).
-- Spot-check of teaching SVGs + chrome: no Verena / Invictus strings in illustration layer.
+- Spot-check of teaching SVGs + chrome: no client-product or client-company strings in illustration layer.
 
 ## Phase gate
 

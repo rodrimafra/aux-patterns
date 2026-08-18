@@ -33,7 +33,7 @@ Pattern library needs teaching images, not abstract decoration. Each illustratio
 
 ## Constraints
 
-- Keep independent identity: no client brand, no Gemframe purple-as-brand, no Verena / Invictus references in art.
+- Keep independent identity: no client brand, no Gemframe purple-as-brand, no client-product or client-company references in art.
 - Category accents stay the existing hex system from `data/en.json` → `cats[n].hex`.
 - Must work in **light and dark** themes (recolor system, not light-only LoUX paste).
 - Teaching meaning must survive without colour: shape, silhouette, layout.

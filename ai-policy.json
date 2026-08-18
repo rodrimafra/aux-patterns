@@ -1,0 +1,22 @@
+{
+  "id": "https://aux-patterns.vercel.app/ai-policy.json",
+  "title": "Agentic UX Patterns AI use policy",
+  "rightsholder": "Rodrigo Mafra",
+  "license": "CC BY-NC-ND 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+  "tdmReservation": 1,
+  "site": "https://aux-patterns.vercel.app/",
+  "contact": "https://aux-patterns.vercel.app/#contact",
+  "prohibited": [
+    "scraping",
+    "data mining",
+    "training or fine-tuning machine learning or AI models on this content",
+    "commercial use without written permission",
+    "derivative pattern libraries without written permission"
+  ],
+  "permitted": [
+    "human reading of the public site",
+    "citation with a link to the live site",
+    "non-commercial sharing of unmodified copies under CC BY-NC-ND 4.0"
+  ]
+}

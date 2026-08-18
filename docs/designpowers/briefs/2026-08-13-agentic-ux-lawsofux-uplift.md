@@ -26,7 +26,7 @@ Craft uplift modeled on Laws of UX *qualities* (whitespace, type scale, line ico
 ## Constraints (from HANDOFF.md / CLAUDE.md)
 
 - Single-file prototype, zero runtime deps, no build step.
-- Client detachment: no Verena / Invictus AI / client copy or visuals.
+- Client detachment: no client product name, client company name, client copy, or client visuals.
 - No em dashes in any language.
 - Preserve behavior: embedded DB, en/pt-br, theme persistence, View Transitions, reduced-motion, container queries, dialog / under-640px bottom sheet, touch targets, safe-area.
 - No content/copy edits in this pass.

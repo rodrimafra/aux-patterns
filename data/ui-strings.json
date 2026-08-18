@@ -57,7 +57,8 @@
     "contactErrMessage": "Enter a message.",
     "langMenu": "Language",
     "langEn": "English",
-    "langPt": "Portuguese (Brazil)"
+    "langPt": "Portuguese (Brazil)",
+    "aiPolicy": "AI policy"
   },
   "pt": {
     "lang": "pt-BR",
@@ -117,6 +118,7 @@
     "contactErrMessage": "Informe uma mensagem.",
     "langMenu": "Idioma",
     "langEn": "Inglês",
-    "langPt": "Português (Brasil)"
+    "langPt": "Português (Brasil)",
+    "aiPolicy": "Política de IA"
   }
 }

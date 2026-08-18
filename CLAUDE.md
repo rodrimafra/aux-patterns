@@ -10,9 +10,9 @@ Agentic UX Patterns: an independent, public pattern library for interfaces where
 
 ## Critical constraint: client detachment
 
-The 49 patterns originated in a paid client engagement (product "Verena," client "Invictus AI") and were deliberately detached and rewritten to stand as independent work. This must hold going forward:
+The 49 patterns originated in a paid client engagement and were deliberately detached and rewritten to stand as independent work. This must hold going forward:
 
-- No client references anywhere: no "Verena," no "Invictus AI," no client screenshots/copy.
+- No client references anywhere: no client product name, no client company name, no client screenshots/copy.
 - Every example in every pattern must cite a real, public, verifiable product (Claude Code, ChatGPT, Copilot, Devin, Perplexity, Stripe, Grammarly, Notion, etc.), never client work.
 - Visual identity must stay independent of the client's brand (dark editorial, serif display type, one accent hue per category from `data/en.json` → `cats[n].hex`). Do not reuse the client's purple/violet "Gemframe" identity.
 - If asked to add a client-named example or reuse client visual identity, flag the conflict instead of complying.

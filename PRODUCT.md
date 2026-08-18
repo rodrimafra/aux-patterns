@@ -33,14 +33,14 @@ Content lives in three copies until a later refactor: `index.html` embedded DB, 
 ## Capabilities and Constraints
 
 - 49 named patterns across 10 categories. Featured patterns only: 3.2 Human-in-the-loop gates, 5.1 Reasoning glimpse, 6.3 Semantic highlighting of uncertainty (those three get Takeaways; do not add Takeaways to the rest unless asked).
-- Client detachment is binding: no Verena, no Invictus AI, no client screenshots or copy. Every example cites a real public verifiable product.
+- Client detachment is binding: no client product name, no client company name, no client screenshots or copy. Every example cites a real public verifiable product.
 - Visual identity must stay independent of the former client's purple/violet Gemframe system. Category accent hues come from `data/en.json` `cats[n].hex`.
 - No em dash character in any language. Use commas, colons, or parentheses.
 - EN-US default. PT-BR is a faithful translation, not a Brazilian-market localization pass. Pattern copy is first draft until the owner reviews it.
 - Intended license: CC BY-NC-ND 4.0. Attribution: © Rodrigo Mafra.
 - Domain, hosting, analytics, and /about are undecided.
 - Astro or Hugo migration is intended later; not started. Do not treat the single-file prototype as a forever stack unless the owner says so.
-- Legal review of the originating Toptal IP-assignment clause before public launch is the owner's job, not a cleared product fact.
+- Legal review of the originating engagement's IP-assignment clause before public launch is the owner's job, not a cleared product fact.
 
 ## Brand Commitments
 

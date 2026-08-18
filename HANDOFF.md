@@ -1,4 +1,4 @@
-# Handoff — Agentic UX Patterns
+# Handoff: Agentic UX Patterns
 
 **For:** the next LLM (or human) picking up this project
 **From:** prior session, prototype phase
@@ -25,7 +25,7 @@ Read this whole file before touching anything. It tells you what this project is
 
 This is the single most important thing to understand before writing or changing content.
 
-The 49 patterns originated as design documentation written during a paid client engagement (an AI product called "Verena," client "Invictus AI," via Toptal). The owner made an explicit, deliberate decision partway through this project: **detach the pattern library from that client relationship** and publish it as independent, standalone work, because:
+The 49 patterns originated as design documentation written during a paid client engagement. The owner made an explicit, deliberate decision partway through this project: **detach the pattern library from that client relationship** and publish it as independent, standalone work, because:
 
 - The underlying *concepts* (human-in-the-loop gates, reasoning traces, confidence display, etc.) are already public discourse across the AI/design industry. Nobody owns them.
 - What *could* be contested is the specific expression/wording written during the paid engagement.
@@ -33,19 +33,19 @@ The 49 patterns originated as design documentation written during a paid client 
 
 **As a result, and this must be preserved going forward:**
 
-1. **No client references anywhere.** No "Verena," no "Invictus AI," no screenshots or copy from that product. Every example in every pattern must cite a *public, verifiable product* (Claude Code, ChatGPT, Copilot, Devin, Perplexity, GitHub Actions, Stripe, Grammarly, Zapier, Notion, etc.), not client work.
+1. **No client references anywhere.** No client product name, no client company name, no screenshots or copy from that product. Every example in every pattern must cite a *public, verifiable product* (Claude Code, ChatGPT, Copilot, Devin, Perplexity, GitHub Actions, Stripe, Grammarly, Zapier, Notion, etc.), not client work.
 2. **No shared visual identity with the client.** The client's brand was purple/violet "Gemframe" gemstone identity. This project's identity is a **completely different, independently designed system**: dark editorial, serif display type (Iowan Old Style / Palatino / Georgia stack), one accent hue per category (see `data/en.json` → `cats[n].hex`), no gemstone, no purple-as-primary-brand-color.
 3. **All 49 pattern specs were rewritten from scratch** in the owner's own words as an independent work, not copied from the client `.docx` source files. If you are asked to expand or edit patterns, keep writing fresh content, don't reach for client material even if it's referenced elsewhere in this environment.
-4. If you encounter any client-named material in your context (e.g., in a file called "Verena — Portfolio Case Study Drafts.md" or similar), **that is a separate, related-but-distinct deliverable** (a design portfolio). Do not merge it into this project or pull client examples from it into this library.
+4. If you encounter any client-named material in your context (for example a portfolio case-study draft), **that is a separate, related-but-distinct deliverable** (a design portfolio). Do not merge it into this project or pull client examples from it into this library.
 
-If a future instruction asks you to "add a Verena example" or similar, flag the conflict with the detachment decision rather than silently complying.
+If a future instruction asks you to add a client-product example or similar, flag the conflict with the detachment decision rather than silently complying.
 
 ---
 
 ## 3. License and attribution
 
 - Intended license: **CC BY-NC-ND 4.0** (same model as Laws of UX), non-commercial, no derivatives without permission.
-- Attribution: **© Rodrigo Mafra**. Not Invictus AI, not Noord Studio (unless the owner tells you otherwise later).
+- Attribution: **© Rodrigo Mafra**. Not a client company, not Noord Studio (unless the owner tells you otherwise later).
 - The site should eventually credit adjacent prior art honestly (see `data/*.json` → `rd` field, "Further reading" per category): Anthropic's "Building Effective Agents," Google PAIR's "People + AI Guidebook," Microsoft's "Guidelines for Human-AI Interaction" (Amershi et al., CHI 2019) and HAX Toolkit, Ben Shneiderman's Human-Centered AI, Emily Campbell's Shape of AI. **Positioning claim should be "first library focused specifically on agentic interaction patterns," not "first AI UX patterns resource."** Overclaiming primacy against these adjacent efforts would be dishonest and easily fact-checked.
 
 ---
@@ -82,14 +82,16 @@ Confirmed working:
 
 ## 5. What's NOT done yet, ranked by what the owner has asked for next
 
-**Phase B (2026-08-14):** 49 pattern stills are in the prototype (`PAT` in `index.html`, `assets/illustrations/patterns/`). Category parents stay Figma. Resume notes: `docs/designpowers/handoff/2026-08-13-illustration-checkpoint.md`.
+**Phase B (2026-08-14):** 49 pattern stills are in the prototype (`PAT` in `index.html`, `assets/illustrations/patterns/`). Category parents stay Figma. Illustration resume: `docs/designpowers/handoff/2026-08-13-illustration-checkpoint.md`.
 
-1. **Per-pattern posters** — the owner asked for this right before requesting this handoff, then paused to get a portable package instead. A taxonomy overview poster already exists as a separate deliverable (`Portfolio Assets/agentic-ux-patterns-taxonomy.svg` in the Verena client folder, built with the CLIENT's Gemframe colors, do NOT reuse those colors here, this project needs its own poster identity using the category hex colors in `data/en.json`). Next step: generate 49 individual pattern posters (one per pattern, this project's dark/serif/category-hue identity) plus a new taxonomy overview poster in the *independent* identity, since the existing one is client-branded and can't be reused as-is.
-2. **Content review pass** — all 98 pattern files (49 EN + 49 PT-BR) are first drafts, written by the AI, never reviewed by the owner for voice, accuracy, or whether the public-product examples still hold up. Do not treat this content as final or launch-ready. PT-BR is a faithful translation, not a Brazilian-market localization pass.
-3. **Single source of truth refactor** — currently `index.html`'s embedded JS object and the 98 markdown files are separately maintained copies of the same content (the markdown was generated first, then the HTML was built from the same Python data structure, then translated, then edited for em dashes independently in both places). This works today but will drift if either is hand-edited without the other. See §7 for the recommended fix.
-4. **Real site migration** — Astro (recommended) or Hugo. Not started. See README.md in the package for the intended approach.
-5. **Domain, hosting, analytics, /about page** — not discussed in depth. The owner has not chosen a domain name yet.
-6. **Legal check** — the owner should have someone review the Toptal engagement's IP-assignment clause before public launch, to confirm the detachment (§2) is clean. Not your job to do, but don't let it get forgotten if you're producing a launch checklist.
+**Chrome (2026-08-18):** Search docks beside the mark, mobile globe language menu, light surfaces and transparent field-colored folio thumbs. Resume: `docs/designpowers/handoff/2026-08-18-prototype-chrome-checkpoint.md`. Commit `2533515` on `main` (not pushed).
+
+1. **Per-pattern posters.** the owner asked for this right before requesting this handoff, then paused to get a portable package instead. A taxonomy overview poster already exists as a separate deliverable (`Portfolio Assets/agentic-ux-patterns-taxonomy.svg` in a previous client folder, built with that client's colors. Do not reuse those colors here, this project needs its own poster identity using the category hex colors in `data/en.json`). Next step: generate 49 individual pattern posters (one per pattern, this project's dark/serif/category-hue identity) plus a new taxonomy overview poster in the *independent* identity, since the existing one is client-branded and can't be reused as-is.
+2. **Content review pass.** all 98 pattern files (49 EN + 49 PT-BR) are first drafts, written by the AI, never reviewed by the owner for voice, accuracy, or whether the public-product examples still hold up. Do not treat this content as final or launch-ready. PT-BR is a faithful translation, not a Brazilian-market localization pass.
+3. **Single source of truth refactor.** currently `index.html`'s embedded JS object and the 98 markdown files are separately maintained copies of the same content (the markdown was generated first, then the HTML was built from the same Python data structure, then translated, then edited for em dashes independently in both places). This works today but will drift if either is hand-edited without the other. See §7 for the recommended fix.
+4. **Real site migration.** Astro (recommended) or Hugo. Not started. See README.md in the package for the intended approach.
+5. **Domain, hosting, analytics, /about page.** not discussed in depth. The owner has not chosen a domain name yet.
+6. **Legal check.** the owner should have someone review the originating engagement's IP-assignment clause before public launch, to confirm the detachment (§2) is clean. Not your job to do, but don't let it get forgotten if you're producing a launch checklist.
 
 ## 6. Style rules the owner has explicitly set (follow these without being asked again)
 
@@ -121,4 +123,4 @@ grep -l '"f": true' data/en.json   # inspect manually, should be 3.2, 5.1, 6.3
 
 ## 9. Who to ask if something is ambiguous
 
-The owner is **Rodrigo Mafra**, Director of Design at Noord Studio, doing this as personal/independent work (separate from his Noord Studio and Invictus AI client engagements). If a decision genuinely can't be inferred from this document or the code, don't guess on anything touching: licensing, client-boundary questions (§2), or brand identity changes. Ask.
+The owner is **Rodrigo Mafra**, Director of Design at Noord Studio, doing this as personal/independent work (separate from his Noord Studio and other client engagements). If a decision genuinely can't be inferred from this document or the code, don't guess on anything touching: licensing, client-boundary questions (§2), or brand identity changes. Ask.
